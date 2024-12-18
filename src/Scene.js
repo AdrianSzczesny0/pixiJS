@@ -2,7 +2,8 @@ import { Graphics } from "pixi.js";
 import { Tile, Tiles } from "./Tiles";
 
 export class Scene{
-    constructor(app){
+    constructor(app,game){
+        this.game = game;
         this.tiles;
         this.init(app);
     }
@@ -19,7 +20,7 @@ export class Scene{
         app.stage.addChild(skyBG);
     }
     drawTiles(app){
-        this.tiles = new Tiles(5,window.innerWidth/90, window.innerHeight/1.3,app.stage);
+        this.tiles = new Tiles(5,window.innerWidth/90, window.innerHeight/1.3,app.stage,app);
     }
 
 }

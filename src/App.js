@@ -9,6 +9,8 @@ export class App{
         this.playerTower = [];
         this.scene;
         this.app;
+        this.selectedTileId = -1;
+        this.tileAmount = 0 ; 
         this.init();
     }
     async init(){
@@ -22,9 +24,10 @@ export class App{
 
 
         { // scene
-            this.scene = new Scene(this.app);
+            this.scene = new Scene(this.app, this);
         }
 
+        console.log(this.scene.tiles);
 
         this.app.ticker.add(function(ticker){
 
