@@ -3,6 +3,7 @@ import { Tile, Tiles } from "./Tiles";
 
 export class Scene{
     constructor(app){
+        this.tiles;
         this.init(app);
     }
     init(app){
@@ -18,7 +19,7 @@ export class Scene{
         app.stage.addChild(skyBG);
     }
     drawTiles(app){
-        const tiles = new Tiles(5,window.innerWidth/90, window.innerHeight/1.3,app.stage);
+        this.tiles = new Tiles(5,window.innerWidth/90, window.innerHeight/1.3,app.stage);
     }
 
 }

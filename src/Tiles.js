@@ -10,12 +10,38 @@ export class Tile {
     }
     init(parent){
         this.drawTile(parent);
+        this.addPointerOverEvent();
+        this.addPointerOutEvent();
+        this.addPointerDownEvent();
     }
     drawTile(parent){
-        const graph = new Graphics()
+        const graph = new Graphics({interactive:true,interactiveChildren:true})
         .rect(this.x, this.y, this.size, this.size)
-        .fill('red');
+        .fill('white');
+        graph.alpha = 0.1;
+        this.sprite = graph;
         parent.addChild(graph);
+    }
+    addPointerOverEvent(){
+        console.log('event listener');
+        this.sprite.on('pointerover', (e)=>{
+            console.log('test');
+            this.sprite.alpha = 0.5;
+        });
+    }
+    addPointerOutEvent(){
+        console.log('event listener');
+        this.sprite.on('pointerout', (e)=>{
+            console.log('test');
+            this.sprite.alpha = 0.1;
+        });
+    }
+    addPointerDownEvent(){
+        console.log('event listener');
+        this.sprite.on('pointerdown', (e)=>{
+            console.log('clicked');
+            this.sprite.alpha = 1;
+        });
     }
 }
 
@@ -31,6 +57,7 @@ export class Tiles{
         let tileWidth = window.innerWidth/15
         for (let x = 0; x < this.columns; x++) {
             const tile = new Tile(this.startX + (tileWidth * x * 1.2) , this.startY, tileWidth,parent);
+            this.tileList.push(tile);
         }
     }
 }
