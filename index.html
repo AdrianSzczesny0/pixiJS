@@ -3,9 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="index.css">
     <title>Document</title>
 </head>
 <body style="background-color: black;">
     <script type="module" src="./src/index.js"></script>
+    <div class="shopModal">
+        <div class="header">
+            <div class="closeBtn">
+                <span>X</span>
+            </div>
+        </div>
+        <div class="modalContent">
+            <div class="shopOptions">
+                <div class="shopOption" id="1">
+                    <img class="tower" src="./src/assets/tower_brown.png">
+                </div>
+                <div class="shopOption" id="2">
+                    <img class="tower" src="./src/assets/tower_blue.png">
+                </div>
+                <div class="shopOption" id="3">
+                    <img class="tower" src="./src/assets/tower_red.png">
+                </div>
+                <div class="shopOption" id="4">
+                    <img class="tower" src="./src/assets/tower_green.png">
+                </div>
+            </div>
+            <div class="selectedOption">
+                <div class="buyDetails">
+                    <span>Details:</span>
+                    <span class="towerDetails"> Some random info about the tower</span>
+                    <br>
+                    <span>Cost:</span>
+                    <span class="towerCost">100</span>
+
+                </div>
+                <div class="buttons">
+                    <div class="buyBtn"> Buy </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <div class="details">
+        <div class="wrapper">
+            <div class="gold">
+                <img></img>
+                
+            </div>
+            <div class="score"> Score:</div>
+            <div class="wave"> Wave:</div>
+        </div>
+    </div>
 </body>
 </html>

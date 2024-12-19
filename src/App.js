@@ -1,6 +1,7 @@
 import { Application } from "pixi.js";
 import { Scene } from "./Scene";
 import { EVENTS } from "./Events";
+import { Shop } from "./ui/Shop";
 
 
 
@@ -33,8 +34,11 @@ export class App{
                 e.detail.data.select();
                 console.log(e.detail.data);
             }
-
         })
+
+        
+
+        // 
     }
 
     async init(){
@@ -49,6 +53,7 @@ export class App{
 
         { // scene
             this.scene = new Scene(this.app, this);
+            // this.shop = new Shop(this.app.stage);
         }
 
         console.log(this.scene.tiles);
