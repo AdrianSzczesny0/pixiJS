@@ -1,6 +1,7 @@
 import { Graphics } from "pixi.js";
 import { EVENTS } from "./Events";
 import { createEvent } from "./Utils";
+import { TowerType } from "./Types";
 
 export class Tile {
     constructor(id,x,y,size,parent,app){
@@ -12,6 +13,7 @@ export class Tile {
         this.init(parent);
         this.app = app;
         this.isSelected = false;
+        this.tower = TowerType.NONE;
 
     }
     init(parent){
