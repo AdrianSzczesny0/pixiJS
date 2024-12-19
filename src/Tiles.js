@@ -1,10 +1,11 @@
-import { Graphics } from "pixi.js";
+import { Assets, Graphics, Sprite } from "pixi.js";
 import { EVENTS } from "./Events";
 import { createEvent } from "./Utils";
 import { TowerType } from "./Types";
 
 export class Tile {
     constructor(id,x,y,size,parent,app){
+        this.parent = parent;
         this.id = id;
         this.x = x;
         this.y = y;
@@ -14,6 +15,8 @@ export class Tile {
         this.app = app;
         this.isSelected = false;
         this.tower = TowerType.NONE;
+        this.towerTexture;
+        this.towerSprite;
 
     }
     init(parent){
@@ -21,6 +24,7 @@ export class Tile {
         this.addPointerOverEvent();
         this.addPointerOutEvent();
         this.addPointerDownEvent();
+        this.drawTower();
     }
     drawTile(parent){
         const graph = new Graphics({interactive:true,interactiveChildren:true})
@@ -29,6 +33,29 @@ export class Tile {
         graph.alpha = 0.1;
         this.sprite = graph;
         parent.addChild(graph);
+    }
+   async drawTower(){
+        switch (this.tower) {
+            case TowerType.EARTH:
+                this.towerTexture = await Assets.load("./src/assets/tower_brown.png");
+                break;
+            case TowerType.WATER:
+                this.towerTexture = await Assets.load("./src/assets/tower_blue.png");
+                break;
+            case TowerType.FIRE:
+                this.towerTexture = await Assets.load("./src/assets/tower_red.png");
+                break;
+            case TowerType.WIND:
+                this.towerTexture = await Assets.load("./src/assets/tower_green.png");
+                break;
+            default:
+                break;
+        }
+        console.log(this.towerTexture);
+        const sprite = new Sprite(this.towerTexture);
+        sprite.position.set(this.x+45, this.y-180);
+        this.parent.addChild(sprite);
+        sprite.scale.set(4);
     }
     addPointerOverEvent(){
         this.sprite.on('pointerover', (e)=>{

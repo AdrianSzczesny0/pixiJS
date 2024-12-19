@@ -16,7 +16,8 @@ export const EVENTS = {
         OPEN: 'T_OPEN',
         CLOSE: 'T_CLOSE',
         SELL:'T_SELL',
-        UPGRADE: 'T_UPGRADE'
+        UPGRADE: 'T_UPGRADE',
+        DRAW: "T_DRAW"
     },
     USER:{
         ADD_MONEY: 'ADD_MONEY',

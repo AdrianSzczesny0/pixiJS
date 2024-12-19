@@ -91,6 +91,11 @@ export class App{
             // console.log('tower upgrade');
         });
 
+        window.addEventListener(EVENTS.TOWER.DRAW, (e) =>{
+            // console.log('tower upgrade');
+            this.scene.tiles.getTileByID(this.selectedTileId).drawTower();
+        });
+
 
         // SHOP Events
         window.addEventListener(EVENTS.SHOP.OPEN, (e) =>{
@@ -117,6 +122,7 @@ export class App{
                     this.gold -= this.buyPrice;
                     this.goldValue.innerHTML = this.gold;
                     this.setTowerType(this.selectedTowerAtShop, selectedTile);
+                    createEvent(EVENTS.TOWER.DRAW);
                     console.log(selectedTile)
                 }else{
                     console.log('NOT ENOUGHT GOLD');
