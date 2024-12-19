@@ -17,11 +17,12 @@ export class App{
         this.scene;
         this.app;
         this.selectedTileId = -1;
+        this.selectedTowerAtShop = -1;
         this.tileAmount = 0 ; 
         this.init();
         this.isShopOpened = false;
         this.isTowerDetailsOpened = false;
-        this.shopOption = document.querySelector('.shopOption');
+        this.shopOptions = document.querySelectorAll('.shopOption');
         this.closeButton = document.querySelector('.closeBtn');
         this.shopModal = document.querySelector('.shopModal');
         this.scoreValue = document.querySelector('.scoreValue');
@@ -57,7 +58,6 @@ export class App{
             }else{
                 e.detail.data.changeAlpha(1);
                 e.detail.data.select();
-                console.log(e.detail.data);
                 this.selectedTileId = e.detail.data.id;
             }
         })
@@ -96,25 +96,37 @@ export class App{
 
         // shop options hover
         
-        this.shopOption.addEventListener('mouseover',(e)=>{
-            console.log('OVER OPTION');
+        // this.shopOption.addEventListener('mouseover',(e)=>{
+        //     console.log('OVER OPTION');
+        // })
+        this.shopOptions.forEach( option =>{
+            option.addEventListener('click',(e)=>{
+                this.deselectAllOptions(this.shopOptions);
+                if(e.target == option){
+                    this.selectOption(e.target);
+                    this.selectedTowerAtShop = e.target.id;
+                }
+            })
         })
         this.closeButton.addEventListener('click', (e)=>{
             createEvent(EVENTS.SHOP.CLOSE);
-            this.scene.tiles.tileList.forEach( item =>{
-                if(this.selectedTileId == item.id){
-                    item.sprite.alpha = 0.1;
-                    item.isSelected = false;
-                    this.selectedTileId = -1;
-                }
-            })
+            this.deselectAllOptions(this.shopOptions);
+            this.scene.tiles.setAllTilesStateToDefault();
+
         })
 
 
         // 
     }
+    deselectAllOptions(optionList){
+        optionList.forEach( option =>{
+            option.classList.remove('selected')
+        })
+    }
+    selectOption(webElement){
+        webElement.classList.add('selected');
+    }
     setInitValues(){
-        console.log(this.scoreValue);
         this.scoreValue.innerHTML = 0;
         this.goldValue.innerHTML = 100;
         this.waveValue.innerHTML = 1;
@@ -136,7 +148,8 @@ export class App{
             // this.shop = new Shop(this.app.stage);
         }
 
-        console.log(this.scene.tiles);
+
+
 
 
         this.addGameEventListeners();

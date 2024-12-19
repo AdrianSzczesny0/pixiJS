@@ -126,3 +126,9 @@
 .hidden{
     display:none;
 }
+.selected{
+    background-color: orange;
+}
+img{
+    pointer-events: none;
+}
