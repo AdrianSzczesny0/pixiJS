@@ -31,21 +31,18 @@ export class Tile {
         parent.addChild(graph);
     }
     addPointerOverEvent(){
-        console.log('event listener');
         this.sprite.on('pointerover', (e)=>{
             createEvent(EVENTS.TILE.OVER,this);
         });
     }
 
     addPointerOutEvent(){
-        console.log('event listener');
         this.sprite.on('pointerout', (e)=>{
             createEvent(EVENTS.TILE.OUT,this);
         });
     }
 
     addPointerDownEvent(){
-        console.log('event listener');
         this.sprite.on('pointerdown', (e)=>{
             createEvent(EVENTS.TILE.CLICK,this);
         });
@@ -93,7 +90,7 @@ export class Tiles{
         let rTile;
         this.tileList.forEach(tile => {
             if(tile.id == id){
-                console.log(tile);
+                // console.log(tile);
                 rTile = tile;
             }
         });
