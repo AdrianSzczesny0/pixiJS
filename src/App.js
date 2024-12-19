@@ -23,10 +23,17 @@ export class App{
             e.detail.data.changeAlpha(0.1);
         })
         window.addEventListener(EVENTS.TILE.CLICK, (e) =>{
+            let isTileSelected = e.detail.data.isSelected;
             this.scene.tiles.setAllTilesStateToDefault();
-            e.detail.data.changeAlpha(1);
-            e.detail.data.select();
-            
+            if(isTileSelected){
+                e.detail.data.changeAlpha(0.1);
+                e.detail.data.deselect();
+            }else{
+                e.detail.data.changeAlpha(1);
+                e.detail.data.select();
+                console.log(e.detail.data);
+            }
+
         })
     }
 

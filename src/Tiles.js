@@ -57,6 +57,7 @@ export class Tile {
         this.isSelected = true;
     }
     deselect(){
+        console.log('deselecting tile');
         this.isSelected = false;
     }
 
