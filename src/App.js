@@ -116,21 +116,26 @@ export class App{
         window.addEventListener(EVENTS.SHOP.BUY, (e) =>{
             // console.log('tower buy');
             let selectedTile = this.scene.tiles.getTileByID(this.selectedTileId);
-            // console.log(selectedTile);
-            if(selectedTile.tower == TowerType.NONE){
-                if(this.gold>= this.buyPrice){
-                    this.gold -= this.buyPrice;
-                    this.goldValue.innerHTML = this.gold;
-                    this.setTowerType(this.selectedTowerAtShop, selectedTile);
-                    createEvent(EVENTS.TOWER.DRAW);
-                    console.log(selectedTile)
+
+            if(this.selectedTileId >= 0 && this.selectedTowerAtShop> 0){
+                if(selectedTile.tower == TowerType.NONE){
+                    if(this.gold>= this.buyPrice){
+                        this.gold -= this.buyPrice;
+                        this.goldValue.innerHTML = this.gold;
+                        this.setTowerType(this.selectedTowerAtShop, selectedTile);
+                        createEvent(EVENTS.TOWER.DRAW);
+                        console.log(selectedTile)
+                        this.selectedTileId = -1;
+    
+                    }else{
+                        console.log('NOT ENOUGHT GOLD');
+                    }
                 }else{
-                    console.log('NOT ENOUGHT GOLD');
+                    // tower already on given tile
                 }
-            }else{
-                // tower already on given tile
             }
-            this.selectedTileId = 0;
+
+            
             this.selectedTowerAtShop = 0;
             this.buyPrice = 0;
         });
@@ -141,13 +146,13 @@ export class App{
         this.shopOptions.forEach( option =>{
             option.addEventListener('click',(e)=>{
                 this.deselectAllOptions(this.shopOptions); 
-                console.log(this.selectedTowerAtShop);
                 if(e.id = option.id){
                     if(this.selectedTowerAtShop == e.id){
                         this.deselectAllOptions(this.shopOptions);
                         this.selectedTowerAtShop = -1;
                     }else{
                         console.log('i am here');
+                        console.log(this);
                         this.selectOption(e.target);
                         this.selectedTowerAtShop = e.id;
                         this.setShopDetails(this.selectedTowerAtShop);
@@ -211,7 +216,6 @@ export class App{
                 this.buyPrice = '';
                 this.towerDescription = '';
             case '1':
-                console.log('test');
                 this.buyPrice = 100;
                 this.towerDescription = 'Earth Tower, shoots earth elemental spikes.'
                 break;
