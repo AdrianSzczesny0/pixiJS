@@ -9,6 +9,9 @@ import { createEvent } from "./Utils";
 
 export class App{
     constructor(){
+        this.score = 0;
+        this.gold = 100;
+        this.wave = 1;
         this.enemyList = [];
         this.playerTower = [];
         this.scene;
@@ -18,7 +21,12 @@ export class App{
         this.init();
         this.isShopOpened = false;
         this.isTowerDetailsOpened = false;
+        this.shopOption = document.querySelector('.shopOption');
+        this.closeButton = document.querySelector('.closeBtn');
         this.shopModal = document.querySelector('.shopModal');
+        this.scoreValue = document.querySelector('.scoreValue');
+        this.goldValue = document.querySelector('.goldValue');
+        this.waveValue = document.querySelector('.waveValue');
     }
     
     async addGameEventListeners(){
@@ -50,6 +58,7 @@ export class App{
                 e.detail.data.changeAlpha(1);
                 e.detail.data.select();
                 console.log(e.detail.data);
+                this.selectedTileId = e.detail.data.id;
             }
         })
 
@@ -85,9 +94,30 @@ export class App{
             console.log('tower buy');
         });
 
+        // shop options hover
         
+        this.shopOption.addEventListener('mouseover',(e)=>{
+            console.log('OVER OPTION');
+        })
+        this.closeButton.addEventListener('click', (e)=>{
+            createEvent(EVENTS.SHOP.CLOSE);
+            this.scene.tiles.tileList.forEach( item =>{
+                if(this.selectedTileId == item.id){
+                    item.sprite.alpha = 0.1;
+                    item.isSelected = false;
+                    this.selectedTileId = -1;
+                }
+            })
+        })
+
 
         // 
+    }
+    setInitValues(){
+        console.log(this.scoreValue);
+        this.scoreValue.innerHTML = 0;
+        this.goldValue.innerHTML = 100;
+        this.waveValue.innerHTML = 1;
     }
 
 
@@ -110,6 +140,8 @@ export class App{
 
 
         this.addGameEventListeners();
+        this.setInitValues();
+
         this.app.ticker.add(function(ticker){
 
             // code updated every frame here
