@@ -1,3 +1,4 @@
+import { TowerType } from "./Types";
 
 
 export const createEvent = (eventName, eventData)=>{

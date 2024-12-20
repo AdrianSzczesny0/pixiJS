@@ -4,6 +4,7 @@ import { EVENTS } from "./Events";
 import { Shop } from "./ui/Shop";
 import { TowerType } from "./Types";
 import { createEvent } from "./Utils";
+import { Enemy, EnemyState } from "./Enemy";
 
 
 
@@ -12,7 +13,8 @@ export class App{
         this.score = 0;
         this.gold = 500;
         this.wave = 1;
-        this.enemyList = [];
+        this.enemiesActive = [];
+        this.enemiesInactive = [];
         this.playerTower = [];
         this.scene;
         this.app;
@@ -34,8 +36,14 @@ export class App{
         this.buyPrice = 0;
         this.towerDescription = '';
 
+
     }
     
+    async moveMobs(){
+        this.enemiesInactive.forEach(mob =>{
+            mob.update();
+        })
+    }
     async addGameEventListeners(){
 
         // TILE EVENTS
@@ -53,7 +61,7 @@ export class App{
             this.scene.tiles.setAllTilesStateToDefault();
             createEvent(EVENTS.SHOP.CLOSE);
             createEvent(EVENTS.TOWER.CLOSE);
-            if(e.detail.data.tower == TowerType.NONE){
+            if(e.detail.data.towerType == TowerType.NONE){
                 createEvent(EVENTS.SHOP.OPEN);
             }else{
                 createEvent(EVENTS.TOWER.OPEN);
@@ -118,7 +126,7 @@ export class App{
             let selectedTile = this.scene.tiles.getTileByID(this.selectedTileId);
 
             if(this.selectedTileId >= 0 && this.selectedTowerAtShop> 0){
-                if(selectedTile.tower == TowerType.NONE){
+                if(selectedTile.towerType == TowerType.NONE){
                     if(this.gold>= this.buyPrice){
                         this.gold -= this.buyPrice;
                         this.goldValue.innerHTML = this.gold;
@@ -134,7 +142,6 @@ export class App{
                     // tower already on given tile
                 }
             }
-
             
             this.selectedTowerAtShop = 0;
             this.buyPrice = 0;
@@ -191,20 +198,20 @@ export class App{
     setTowerType(id,tile){
         switch (id) {
             case '1':
-                tile.tower = TowerType.EARTH;
+                tile.towerType = TowerType.EARTH;
                 break;
             case '2':
-                tile.tower = TowerType.WATER;
+                tile.towerType = TowerType.WATER;
                 break;
             case '3':
-                tile.tower = TowerType.FIRE;
+                tile.towerType = TowerType.FIRE;
                 break;
             case '4':
-                tile.tower = TowerType.WIND;
+                tile.towerType = TowerType.WIND;
                 break;
         
             default:
-                tile.tower = TowerType.NONE;
+                tile.towerType = TowerType.NONE;
                 break;
         }
     }
@@ -241,6 +248,7 @@ export class App{
     }
 
 
+
     async init(){
         this.app = new Application();
         await this.app.init({
@@ -249,7 +257,8 @@ export class App{
             backgroundColor: '#519a82ff'
         })
         document.body.appendChild(this.app.canvas);
-        
+
+
 
         { // scene
             this.scene = new Scene(this.app, this);
@@ -259,15 +268,39 @@ export class App{
 
 
 
+
         // this.setShopDetails('0');
         this.towerDetails.innerHTML = '';
         this.addGameEventListeners();
         this.setInitValues();
 
+        let inactive =createMobs(30,this.app.stage);
+        let active = [];
+        let waveDelayCounter = 0;
         this.app.ticker.add(function(ticker){
-
-            // code updated every frame here
+            waveDelayCounter+=ticker.deltaTime;
+            if(waveDelayCounter>=31){
+                waveDelayCounter = 0;
+            }
+            moveMobs(inactive);
         });
         
     }
+}
+
+
+function moveMobs(list){
+    list.forEach(element =>{
+        element.update();
+    })
+}
+
+function createMobs(enemyAmount, app){
+    const list = [];
+    for (let i = 0; i < enemyAmount; i++) {
+        let enemy = new Enemy(window.innerWidth/2 + i*250, window.innerHeight/1.35,'Small',1,app);
+        enemy.isActive = false;
+        list.push(enemy);
+    }
+    return list;
 }

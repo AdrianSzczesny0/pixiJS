@@ -1,47 +1,47 @@
-import { Graphics } from "pixi.js";
+import { Assets, Graphics, Sprite } from "pixi.js";
 import { Entity } from "./Entity";
 import { TowerType } from "./Types";
+import { getTowerDetails } from "./TowerDefinitions";
 
 
 export class Tower{
-    constructor(x,y,w,h,towerType,towerDetails,parent){
+    constructor(x,y,towerType,parent){
+        this.parent= parent;
         this.x = x;
         this.y = y;
-        this.w = w;
-        this.h = h;
         this.towerType = towerType;
-        this.atk = towerDetails.atk;
-        this.currentHp = towerDetails.hp;
-        this.atackSpeed = towerDetails.atackSpeed;
+        this.towerDetails;
         this.sprite;
         this.takeDmg = false;
         this.atack = false;
         this.currentTarget = null;
         this.init(parent);
     }
-    init(parent){
-        this.drawTower(parent);
+    init(){
+        this.drawTower();
     }
-    drawTower(parent){
-        const tower = new Graphics()
-        graphic.rect(this.x, this.y, this.w, this.h);
+    async drawTower(){
         switch (this.towerType) {
             case TowerType.EARTH:
-                graphic.fill('brown');
+                this.towerTexture = await Assets.load("./src/assets/tower_brown.png");
                 break;
             case TowerType.WATER:
-                graphic.fill('blue');
+                this.towerTexture = await Assets.load("./src/assets/tower_blue.png");
                 break;
             case TowerType.FIRE:
-                graphic.fill('red');
+                this.towerTexture = await Assets.load("./src/assets/tower_red.png");
                 break;
             case TowerType.WIND:
-                graphic.fill('green');
+                this.towerTexture = await Assets.load("./src/assets/tower_green.png");
                 break;
             default:
                 break;
         }
-        parent.addChild(graphic);
+        console.log(this.towerTexture);
+        this.sprite = new Sprite(this.towerTexture);
+        this.sprite.position.set(this.x+45, this.y-180);
+        this.parent.addChild(this.sprite);
+        this.sprite.scale.set(4);
     }
     update(){
         this.atack();
