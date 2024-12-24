@@ -5,6 +5,7 @@ import { Shop } from "./ui/Shop";
 import { TowerType } from "./Types";
 import { createEvent } from "./Utils";
 import { Enemy, EnemyState } from "./Enemy";
+import { PROJECTILE_TYPE, Projectile } from "./Projectile";
 
 
 
@@ -15,7 +16,9 @@ export class App{
         this.wave = 1;
         this.enemiesActive = [];
         this.enemiesInactive = [];
-        this.playerTower = [];
+        this.playerTowers = [];
+        this.activeProjectiles = [];
+        this.projectilePool = [];
         this.scene;
         this.app;
         this.selectedTileId = -1;
@@ -37,6 +40,9 @@ export class App{
         this.towerDescription = '';
 
 
+    }
+    async getTowerList(){
+        return this.playerTowers;
     }
     
     async moveMobs(){
@@ -102,6 +108,30 @@ export class App{
         window.addEventListener(EVENTS.TOWER.DRAW, (e) =>{
             // console.log('tower upgrade');
             this.scene.tiles.getTileByID(this.selectedTileId).drawTower();
+            this.playerTowers.push(this.scene.tiles.getTileByID(this.selectedTileId).tower);
+            console.log(this);
+        });
+        window.addEventListener(EVENTS.TOWER.ATACK, (e) =>{
+            if(this.projectilePool.length>0){
+                const projectile = this.projectilePool[0];
+                projectile.sprite.visible= true;
+                this.projectilePool.splice(0,1);
+                this.activeProjectiles.push(projectile);
+            }
+        });
+
+        // PROJECTILE EVENTS
+        window.addEventListener(EVENTS.PROJECTILE.RESET, (e) =>{
+            let index = e.detail.data;
+            console.log(e);
+            console.log(`projectile index: ${index}`);
+            for (let i = 0; i < this.activeProjectiles; i++) {
+                if(this.activeProjectiles[i].id == e.detrail.data){
+                    let projectile = this.activeProjectiles[i];
+                    moveFromListToList(this.activeProjectiles,this.projectilePool, index);
+                }
+            }
+            // console.log(this.projectilePool);
         });
 
 
@@ -247,9 +277,8 @@ export class App{
 
     }
 
-
-
     async init(){
+        const game = this;
         this.app = new Application();
         await this.app.init({
             width: window.innerWidth-20,
@@ -260,10 +289,8 @@ export class App{
 
 
 
-        { // scene
-            this.scene = new Scene(this.app, this);
+        this.scene = new Scene(this.app, this);
             // this.shop = new Shop(this.app.stage);
-        }
 
 
 
@@ -273,21 +300,62 @@ export class App{
         this.towerDetails.innerHTML = '';
         this.addGameEventListeners();
         this.setInitValues();
+        createProjectilePool(this.app, this.projectilePool);
+        console.log(this.projectilePool);
+        const inactiveProjectiles = this.projectilePool;
+        const activeProjectiles = this.activeProjectiles;
+        const playerTower = this.playerTowers;
 
         let inactive =createMobs(30,this.app.stage);
         let active = [];
         let waveDelayCounter = 0;
+
+
+
+        //test move from list to list
+        const list1 = 
+        [
+            {name:'test0', id:0},
+            {name:'test1', id:1},
+            {name:'test2', id:2},
+        ]
+        const list2 = 
+        [
+            {name:'test3', id:3},
+            {name:'test4', id:4},
+            {name:'test5', id:5},
+        ]
+     
+
+        moveFromListToList(list1,list2,1);
+        console.log('=============================================')
+        console.log('MOVING FROM LIST TO LIST TEST');
+        console.log(list1);
+        console.log(list2);
+
+        console.log('=============================================')
+
         this.app.ticker.add(function(ticker){
             waveDelayCounter+=ticker.deltaTime;
             if(waveDelayCounter>=31){
                 waveDelayCounter = 0;
             }
             moveMobs(inactive);
+            towersAtack(playerTower);
+            updateProjectiles(activeProjectiles);
         });
         
     }
 }
 
+
+function updateProjectiles(list){
+    list.forEach(element =>{
+        if(element!=undefined){
+            element.update();
+        }
+    })
+}
 
 function moveMobs(list){
     list.forEach(element =>{
@@ -295,12 +363,46 @@ function moveMobs(list){
     })
 }
 
+function towersAtack(list){
+    list.forEach(element =>{
+        if(element!=undefined){
+            element.update();
+        }
+        
+    })
+}
+
 function createMobs(enemyAmount, app){
     const list = [];
     for (let i = 0; i < enemyAmount; i++) {
-        let enemy = new Enemy(window.innerWidth/2 + i*250, window.innerHeight/1.35,'Small',1,app);
+        let enemy = new Enemy(window.innerWidth+500 + i*250, window.innerHeight/1.35,'Small',1,app);
         enemy.isActive = false;
         list.push(enemy);
     }
     return list;
+}
+
+function createProjectilePool(app,list){
+    for (let i = 0; i < 30; i++) {
+        list.push(new Projectile(i,500,500,PROJECTILE_TYPE.EARTH,app.stage));
+    }
+}
+
+function moveFromListToList(fromList,toList, byID){
+    console.log('LISTS BEFORE');
+    console.log(fromList);
+    console.log(toList);
+    for (let i = 0; i < fromList.length; i++) {
+        console.log(fromList[i].id);
+        if( fromList[i].id == byID){
+            toList.push(fromList[i]);
+            fromList.splice(i,1);
+            break;
+        }
+    } 
+    console.log('========================');
+    console.log('LISTS BEFORE');
+    console.log(fromList);
+    console.log(toList);
+
 }

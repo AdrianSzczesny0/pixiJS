@@ -2,10 +2,13 @@ import { Assets, Graphics, Sprite } from "pixi.js";
 import { Entity } from "./Entity";
 import { TowerType } from "./Types";
 import { getTowerDetails } from "./TowerDefinitions";
+import { createEvent } from "./Utils";
+import { EVENTS } from "./Events";
 
 
 export class Tower{
-    constructor(x,y,towerType,parent){
+    constructor(x,y,towerType,parent,app){
+        this.app = app;
         this.parent= parent;
         this.x = x;
         this.y = y;
@@ -13,8 +16,10 @@ export class Tower{
         this.towerDetails;
         this.sprite;
         this.takeDmg = false;
-        this.atack = false;
+        this.atack = true;
         this.currentTarget = null;
+        this.projectileList;
+        this.atackCounter = 0;
         this.init(parent);
     }
     init(){
@@ -44,20 +49,21 @@ export class Tower{
         this.sprite.scale.set(4);
     }
     update(){
-        this.atack();
+        this.attack();
         this.takeDamage();
     }
     takeDamage(){
         if(this.takeDmg){
-            // take damage
-
             this.takeDmg = false;
         }
     }
     attack(){
         if(this.atack){
-            // perform atack
-            this.atack = false;
+            this.atackCounter++;
+            if(this.atackCounter >= this.towerDetails.atackSpeed*5){
+                createEvent(EVENTS.TOWER.ATACK);
+                this.atackCounter = 0;
+            }
         }
     }
 }

@@ -20,7 +20,7 @@ export class Scene{
         app.stage.addChild(skyBG);
     }
     drawTiles(app){
-        this.tiles = new Tiles(5,window.innerWidth/90, window.innerHeight/1.3,app.stage,app);
+        this.tiles = new Tiles(5,window.innerWidth/90, window.innerHeight/1.3,app.stage,this.game);
     }
 
 }

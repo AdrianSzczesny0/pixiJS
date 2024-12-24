@@ -53,29 +53,8 @@ export class Tile {
         parent.addChild(graph);
     }
    async drawTower(){
-        this.tower = new Tower(this.x,this.y,this.towerType,this.parent);
+        this.tower = new Tower(this.x,this.y,this.towerType,this.parent,this.app);
         this.tower.towerDetails = getTowerDetails(this.towerType);
-        // switch (this.tower) {
-        //     case TowerType.EARTH:
-        //         this.towerTexture = await Assets.load("./src/assets/tower_brown.png");
-        //         break;
-        //     case TowerType.WATER:
-        //         this.towerTexture = await Assets.load("./src/assets/tower_blue.png");
-        //         break;
-        //     case TowerType.FIRE:
-        //         this.towerTexture = await Assets.load("./src/assets/tower_red.png");
-        //         break;
-        //     case TowerType.WIND:
-        //         this.towerTexture = await Assets.load("./src/assets/tower_green.png");
-        //         break;
-        //     default:
-        //         break;
-        // }
-        // console.log(this.towerTexture);
-        // const sprite = new Sprite(this.towerTexture);
-        // sprite.position.set(this.x+45, this.y-180);
-        // this.parent.addChild(sprite);
-        // sprite.scale.set(4);
     }
     addPointerOverEvent(){
         this.sprite.on('pointerover', (e)=>{
