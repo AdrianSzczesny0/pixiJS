@@ -42,7 +42,6 @@ export class Tower{
             default:
                 break;
         }
-        console.log(this.towerTexture);
         this.sprite = new Sprite(this.towerTexture);
         this.sprite.position.set(this.x+45, this.y-180);
         this.parent.addChild(this.sprite);
@@ -61,7 +60,7 @@ export class Tower{
         if(this.atack){
             this.atackCounter++;
             if(this.atackCounter >= this.towerDetails.atackSpeed*5){
-                createEvent(EVENTS.TOWER.ATACK);
+                createEvent(EVENTS.TOWER.ATACK , {x:this.x, y:this.y, towerDetails:this.towerDetails});
                 this.atackCounter = 0;
             }
         }

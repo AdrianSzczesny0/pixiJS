@@ -17,7 +17,7 @@ export const getTowerDetails = (towerType) =>{
                 },
                 atack:{
                     level:1,
-                    curent:10,
+                    curent:30,
                     increasePerLevel: [ 5, 20, 30, 45, 60, 80, 85, 100, 120 ],
                     pricePerUpgrade: [ 100,200,300,400, 500,700,900, 1500, 2500 ]
                 },  

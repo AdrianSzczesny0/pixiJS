@@ -10,7 +10,9 @@ export const PROJECTILE_TYPE = {
 }
 
 export class Projectile{
-    constructor(id,startingX,startingY,type,parent){
+    constructor(id,startingX,startingY,type,parent,activeList,inactiveList){
+        this.activeList = activeList;
+        this.inactiveList = inactiveList;
         this.id =id;
         this.startingPosition = {
             x: startingX,
@@ -19,17 +21,20 @@ export class Projectile{
         this.parent = parent;
         this.x;
         this.y;
+        this.w;
+        this.h;
         this.type = type;
-        this.isActive = true;
+        this.isActive = false;
         this.isReset = false;
-        this.atack;
-        this.moveSpeed = 10;
+        this.atack = 50;
+        this.moveSpeed = 15;
         this.earthTexture;
         this.waterTexture;
         this.fireTexture;
         this.windTexture;
         this.sprite;
         this.lifeTimeCounter = 0;
+        this.isVisible = false;
         this.init();
     }
     async init(){
@@ -46,28 +51,29 @@ export class Projectile{
     draw(){
         switch(this.type){
             case PROJECTILE_TYPE.EARTH:
-            this.sprite = new Sprite(this.earthTexture);
+            this.sprite = new Sprite({texture: this.earthTexture, label: 'particle' });
             this.sprite.position.set(this.x, this.y);
             this.sprite.scale.set(2,2);
-            this.parent.addChild(this.sprite);
             this.sprite.visible = false;
+            this.parent.addChild(this.sprite);
+            this.w = this.sprite.width;
+            this.h = this.sprite.height;
             break;
         }
     }
 
     update(){
-        this.lifeTimeCounter++;
         if(this.isActive){
+            this.lifeTimeCounter++;
             this.move();
             this.checkForColision();
         }
-        if(!this.isActive && this.sprite.visible){
-            this.sprite.visible = false;
-        }
-        if(this.lifeTimeCounter>= 500){
-            this.reset();
+        if(this.lifeTimeCounter >= 300){
+            this.setInactive();
+            
         }
     }
+
 
     move(){
         if(this.isActive){ 
@@ -81,29 +87,34 @@ export class Projectile{
 
     }
 
-    reset(){
-        this.setAtack(0)
-        this.setMoveSpeed(0);
-        this.x = this.startingPosition.x;
-        this.y = this.startingPosition.y;
-        createEvent(EVENTS.PROJECTILE.RESET,this.id);
-        this.sprite.visible = false;
-        this.lifeTimeCounter = 0;
+
+    reset(x,y){
+        this.isActive = true;
+        this.isVisible = true;
+        this.sprite.visible = true;
+        this.sprite.position.x = x+100;
+        this.sprite.position.y = y;
+        this.x = x;
+        this.y = y;
     }
 
     setMoveSpeed(value){
         this.moveSpeed = value;
     }
 
-    setActive(){
-        this.isActive = true;
-        this.sprite.visible = true;
-    }
-
     setInactive(){
+        this.lifeTimeCounter = 0;
+        this.setAtack(0)
         this.isActive = false;
         this.sprite.visible = false;
+        for (let i = 0; i < this.activeList.length; i++) {
+            if(this.activeList[i] == this){
+                this.activeList.splice(i,1);
+            };
+        }
+        this.inactiveList.push(this);
     }
+    
 
     setAtack(value){
         this.atack = value;

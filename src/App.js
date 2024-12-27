@@ -1,4 +1,4 @@
-import { Application } from "pixi.js";
+import { Application,Text } from "pixi.js";
 import { Scene } from "./Scene";
 import { EVENTS } from "./Events";
 import { Shop } from "./ui/Shop";
@@ -84,8 +84,8 @@ export class App{
                 this.selectedTileId = e.detail.data.id;
             }
             this.buyPrice = 0;
-            console.log(this.scene.tiles.getTileByID(this.selectedTileId));
-            console.log(this);
+            // console.log(this.scene.tiles.getTileByID(this.selectedTileId));
+            // console.log(this);
         })
 
         // Tower events
@@ -109,22 +109,29 @@ export class App{
             // console.log('tower upgrade');
             this.scene.tiles.getTileByID(this.selectedTileId).drawTower();
             this.playerTowers.push(this.scene.tiles.getTileByID(this.selectedTileId).tower);
-            console.log(this);
+            // console.log(this);
         });
+
         window.addEventListener(EVENTS.TOWER.ATACK, (e) =>{
+            console.log(e);
+            const data = e.detail.data;
             if(this.projectilePool.length>0){
                 const projectile = this.projectilePool[0];
-                projectile.sprite.visible= true;
-                this.projectilePool.splice(0,1);
-                this.activeProjectiles.push(projectile);
+                projectile.reset(data.x, data.y);
+                console.log(data.towerDetails.atack.curent);
+                projectile.setAtack(data.towerDetails.atack.curent);
+                // console.log(projectile.sprite.visible);
+                moveFromListToList(this.projectilePool,this.activeProjectiles,0);
+                // console.log('active list:' +this.activeProjectiles.length);
+                // console.log('inactive list:' +this.projectilePool.length);
             }
         });
 
         // PROJECTILE EVENTS
         window.addEventListener(EVENTS.PROJECTILE.RESET, (e) =>{
             let index = e.detail.data;
-            console.log(e);
-            console.log(`projectile index: ${index}`);
+            // console.log(e);
+            // console.log(`projectile index: ${index}`);
             for (let i = 0; i < this.activeProjectiles; i++) {
                 if(this.activeProjectiles[i].id == e.detrail.data){
                     let projectile = this.activeProjectiles[i];
@@ -274,7 +281,6 @@ export class App{
         }
         this.towerDetails.innerHTML = this.towerDescription;
         this.towerCost.innerHTML = this.buyPrice;
-
     }
 
     async init(){
@@ -292,6 +298,7 @@ export class App{
         this.scene = new Scene(this.app, this);
             // this.shop = new Shop(this.app.stage);
 
+       
 
 
 
@@ -300,13 +307,13 @@ export class App{
         this.towerDetails.innerHTML = '';
         this.addGameEventListeners();
         this.setInitValues();
-        createProjectilePool(this.app, this.projectilePool);
-        console.log(this.projectilePool);
+        createProjectilePool(this.app,this.activeProjectiles,this.projectilePool);
         const inactiveProjectiles = this.projectilePool;
         const activeProjectiles = this.activeProjectiles;
         const playerTower = this.playerTowers;
 
-        let inactive =createMobs(30,this.app.stage);
+        let enemyList =createMobs(30,this.app.stage,game);
+        game.enemiesActive = enemyList;
         let active = [];
         let waveDelayCounter = 0;
 
@@ -327,26 +334,24 @@ export class App{
         ]
      
 
-        moveFromListToList(list1,list2,1);
-        console.log('=============================================')
-        console.log('MOVING FROM LIST TO LIST TEST');
-        console.log(list1);
-        console.log(list2);
-
-        console.log('=============================================')
+        const testText = new Text({text:'test'});
+        this.app.stage.addChild(testText);
 
         this.app.ticker.add(function(ticker){
             waveDelayCounter+=ticker.deltaTime;
             if(waveDelayCounter>=31){
                 waveDelayCounter = 0;
+                // console.log(game.projectilePool);
+
             }
-            moveMobs(inactive);
+            moveMobs(enemyList);
             towersAtack(playerTower);
             updateProjectiles(activeProjectiles);
         });
         
     }
 }
+
 
 
 function updateProjectiles(list){
@@ -372,37 +377,39 @@ function towersAtack(list){
     })
 }
 
-function createMobs(enemyAmount, app){
+function createMobs(enemyAmount, app,game){
     const list = [];
     for (let i = 0; i < enemyAmount; i++) {
-        let enemy = new Enemy(window.innerWidth+500 + i*250, window.innerHeight/1.35,'Small',1,app);
+        let enemy = new Enemy(window.innerWidth+500 + i*250, window.innerHeight/1.30,'Small',1,app,game);
         enemy.isActive = false;
         list.push(enemy);
     }
     return list;
 }
 
-function createProjectilePool(app,list){
-    for (let i = 0; i < 30; i++) {
-        list.push(new Projectile(i,500,500,PROJECTILE_TYPE.EARTH,app.stage));
+function createProjectilePool(app,active,inactive){
+    for (let i = 0; i < 50; i++) {
+        inactive.push(new Projectile(i,500,500,PROJECTILE_TYPE.EARTH,app.stage,active,inactive));
     }
 }
 
 function moveFromListToList(fromList,toList, byID){
-    console.log('LISTS BEFORE');
-    console.log(fromList);
-    console.log(toList);
-    for (let i = 0; i < fromList.length; i++) {
-        console.log(fromList[i].id);
-        if( fromList[i].id == byID){
-            toList.push(fromList[i]);
-            fromList.splice(i,1);
-            break;
-        }
-    } 
-    console.log('========================');
-    console.log('LISTS BEFORE');
-    console.log(fromList);
-    console.log(toList);
+    // console.log('LISTS BEFORE');
+    // console.log(fromList);
+    // console.log(toList);
+    if(fromList.length> 0){
+        toList.push(fromList[0]);
+        fromList.splice(0,1);
+    }
+    // for (let i = 0; i < fromList.length; i++) {
+    //     if( fromList[i].id == byID){
+    //         toList.push(fromList[i]);
+    //         fromList.splice(i,1);
+    //         break;
+    //     }
+    // } 
+    // console.log('LISTS AFTER');
+    // console.log(fromList);
+    // console.log(toList);
 
 }
