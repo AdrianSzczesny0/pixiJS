@@ -21,10 +21,10 @@ export class Enemy {
         this.w;
         this.h;
         this.enemyType = enemyType;
-        this.state = EnemyState.HIT;
+        this.state = EnemyState.WALKING;
         this.sprite;
         this.stats = {
-            currentHp : 100,
+            currentHp : 200,
             moveSpeed: 5
         }
         this.level = level;
@@ -81,22 +81,23 @@ export class Enemy {
         if(this.pushBackTimer>10){
             this.pushBackTimer = 0;
             this.state = EnemyState.WALKING;
+            this.drawDmgTaken();
+            this.stats.currentHp-= this.receiveDmgAmount;
+            this.receiveDmgAmount = 0;
+            this.receiveDmg = false;
         }
         if (this.sprite!= undefined){
-            this.sprite.position.x+=20;
-            this.sprite.position.y += Math.sin(-this.pushBackTimer);
+            this.sprite.position.x+=10;
         }
         
     }
 
     hit(){
-        if(this.receiveDmg){
-            this.stats.currentHp-= this.receiveDmgAmount;
-            this.receiveDmgAmount = 0;
-            this.receiveDmg = false;
-        }
         this.pushBack();
-        console.log(this.stats.currentHp);
+    }
+    drawDmgTaken(){
+        this.game.textObjectPooler.moveToActivePool(this.receiveDmgAmount,this.sprite.x, this.sprite.y);
+        console.log(this.game.textObjectPooler.active);
     }
 
     stateHandler(){
@@ -116,19 +117,30 @@ export class Enemy {
     }
     checkForCollision(){
         if(this.collisionCounter>=2 && !this.isDead){
-            this.game.activeProjectiles.forEach(particle => {
-                // console.log(`particle: ${particle}`);
-                let isCollision = this.collisionCheck(this, particle);
-                // console.log(`collision: ${isCollision}`);
+            for (let i = 0; i < this.game.activeProjectiles.length; i++) {
+                let isCollision = this.collisionCheck(this, this.game.activeProjectiles[i]);
                 if(isCollision){
-                    this.receiveDmgAmount = particle.atack;
+                    this.receiveDmgAmount = this.game.activeProjectiles[i].atack;
                     console.log(`receive dmhg : ${this.receiveDmgAmount}`);
                     this.state= EnemyState.HIT;
-                    console.log(this.state)
-                    particle.setInactive();
+                    this.game.activeProjectiles[i].setInactive();
+                    console.log(this.state);
+                    break;
                 }
-            });
-            this.collisionCounter = 0;
+            }
+            // this.game.activeProjectiles.forEach(particle => {
+            //     // console.log(`particle: ${particle}`);
+            //     let isCollision = this.collisionCheck(this, particle);
+            //     // console.log(`collision: ${isCollision}`);
+            //     if(isCollision){
+            //         this.receiveDmgAmount = particle.atack;
+            //         console.log(`receive dmhg : ${this.receiveDmgAmount}`);
+            //         this.state= EnemyState.HIT;
+            //         console.log(this.state)
+            //         particle.setInactive();
+            //     }
+            // });
+            // this.collisionCounter = 0;
         }
     }
     collisionCheck(obj1,obj2){
@@ -146,9 +158,10 @@ export class Enemy {
             this.sprite.visible = false;
             this.isDead = true;
         }
+        this.checkForCollision();
         this.stateHandler();
         this.collisionCounter+=0.1;
-        this.checkForCollision();
+        
     }
 
     flash(color){

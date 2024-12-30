@@ -6,6 +6,7 @@ import { TowerType } from "./Types";
 import { createEvent } from "./Utils";
 import { Enemy, EnemyState } from "./Enemy";
 import { PROJECTILE_TYPE, Projectile } from "./Projectile";
+import { TextObjectPooler } from "./TextObjectPooler";
 
 
 
@@ -27,6 +28,7 @@ export class App{
         this.init();
         this.isShopOpened = false;
         this.isTowerDetailsOpened = false;
+        this.textObjectPooler = undefined;
         this.shopOptions = document.querySelectorAll('.shopOption');
         this.closeButton = document.querySelector('.closeBtn');
         this.buyButton = document.querySelector('.buyBtn');
@@ -113,12 +115,12 @@ export class App{
         });
 
         window.addEventListener(EVENTS.TOWER.ATACK, (e) =>{
-            console.log(e);
+            // console.log(e);
             const data = e.detail.data;
             if(this.projectilePool.length>0){
                 const projectile = this.projectilePool[0];
                 projectile.reset(data.x, data.y);
-                console.log(data.towerDetails.atack.curent);
+                // console.log(data.towerDetails.atack.curent);
                 projectile.setAtack(data.towerDetails.atack.curent);
                 // console.log(projectile.sprite.visible);
                 moveFromListToList(this.projectilePool,this.activeProjectiles,0);
@@ -195,8 +197,6 @@ export class App{
                         this.deselectAllOptions(this.shopOptions);
                         this.selectedTowerAtShop = -1;
                     }else{
-                        console.log('i am here');
-                        console.log(this);
                         this.selectOption(e.target);
                         this.selectedTowerAtShop = e.id;
                         this.setShopDetails(this.selectedTowerAtShop);
@@ -254,7 +254,6 @@ export class App{
     }
 
     setShopDetails(id){
-        console.log('updating tower details');
         switch (id) {
             case '0':
                 this.buyPrice = '';
@@ -336,6 +335,7 @@ export class App{
 
         const testText = new Text({text:'test'});
         this.app.stage.addChild(testText);
+        game.textObjectPooler = new TextObjectPooler(30,this.game, this.app.stage);
 
         this.app.ticker.add(function(ticker){
             waveDelayCounter+=ticker.deltaTime;
@@ -347,11 +347,20 @@ export class App{
             moveMobs(enemyList);
             towersAtack(playerTower);
             updateProjectiles(activeProjectiles);
+            updateTextObjectws(game.textObjectPooler.active);
+            game.textObjectPooler.update();
         });
         
     }
 }
 
+function updateTextObjectws(list){
+    list.forEach(element =>{
+        if(element!=undefined){
+            element.update();
+        }
+    });
+}
 
 
 function updateProjectiles(list){
@@ -380,7 +389,7 @@ function towersAtack(list){
 function createMobs(enemyAmount, app,game){
     const list = [];
     for (let i = 0; i < enemyAmount; i++) {
-        let enemy = new Enemy(window.innerWidth+500 + i*250, window.innerHeight/1.30,'Small',1,app,game);
+        let enemy = new Enemy(window.innerWidth+500 + i*500, window.innerHeight/1.30,'Small',1,app,game);
         enemy.isActive = false;
         list.push(enemy);
     }

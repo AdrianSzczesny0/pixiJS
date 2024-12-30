@@ -11,13 +11,13 @@ export const getTowerDetails = (towerType) =>{
                 health:{
                     level:1,
                     max:50,
-                    curent:50,
+                    curent:100,
                     increasePerLevel: [ 100, 100, 200, 400, 400, 500, 500, 700, 1000 ],
                     pricePerUpgrade:  [ 100, 150, 200, 500, 600, 800, 1000, 1300, 2000  ]
                 },
                 atack:{
                     level:1,
-                    curent:30,
+                    curent:60,
                     increasePerLevel: [ 5, 20, 30, 45, 60, 80, 85, 100, 120 ],
                     pricePerUpgrade: [ 100,200,300,400, 500,700,900, 1500, 2500 ]
                 },  

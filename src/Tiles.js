@@ -55,6 +55,7 @@ export class Tile {
    async drawTower(){
         this.tower = new Tower(this.x,this.y,this.towerType,this.parent,this.app);
         this.tower.towerDetails = getTowerDetails(this.towerType);
+        console.log(this.tower.towerDetails);
     }
     addPointerOverEvent(){
         this.sprite.on('pointerover', (e)=>{
