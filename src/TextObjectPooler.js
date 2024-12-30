@@ -128,7 +128,7 @@ export class damageText{
     }
 
     move(){
-        this.textSprite.position.y--;
+        this.textSprite.position.y-=5;
     }
 
 }
