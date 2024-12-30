@@ -90,7 +90,7 @@ export class Enemy {
         if(this.pushBackTimer>5){
             this.pushBackTimer = 0;
             this.state = EnemyState.WALKING;
-            this.drawDmgTaken(this.receiveDmgAmount);
+            this.drawDmgTaken(this.receiveDmgAmount,"white");
             this.stats.currentHp-= this.receiveDmgAmount;
             this.receiveDmgAmount = 0;
             this.receiveDmg = false;
@@ -104,8 +104,9 @@ export class Enemy {
     hit(){
         this.pushBack();
     }
-    drawDmgTaken(amount){
-        this.game.textObjectPooler.moveToActivePool(amount,this.sprite.x, this.sprite.y);
+
+    drawDmgTaken(amount,color){
+        this.game.textObjectPooler.moveToActivePool(color,amount, this.sprite.x, this.sprite.y);
         console.log(this.game.textObjectPooler.active);
     }
 
@@ -124,6 +125,7 @@ export class Enemy {
                 break;
         }
     }
+
     checkForCollision(){
         if(this.collisionCounter>=2 && !this.isDead){
             for (let i = 0; i < this.game.activeProjectiles.length; i++) {
@@ -183,6 +185,7 @@ export class Enemy {
         this.burn();
         
     }
+
     burn(){
         if(this.isBurning){
             this.burningTimer+=0.1;
@@ -198,10 +201,11 @@ export class Enemy {
             if(this.burnDelay>=2){
                 this.stats.currentHp -=this.burAmount;
                 this.burnDelay = 0;
-                this.drawDmgTaken(this.burnAmount);
+                this.drawDmgTaken(this.burnAmount,'red');
             }
         }
     }
+
     slow(){
         if(this.isSlowed){
             this.slowAmount = 2;

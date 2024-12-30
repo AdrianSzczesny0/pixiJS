@@ -19,10 +19,11 @@ export class TextObjectPooler{
         }
     }
 
-    moveToActivePool(textValue,x,y){
+    moveToActivePool(color,textValue,x,y){
         if(this.inactive.length> 0){
             let text = this.inactive[0];
             text.text = textValue;
+            text.textSprite.tint = color;
             text.reset(x,y-100);
             this.active.push(this.inactive[0]);
             this.inactive.splice(0,1);
