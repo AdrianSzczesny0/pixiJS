@@ -45,6 +45,7 @@ export class Enemy {
         this.burningTimer = 0;
         this.burAmount = 0;
         this.burnDelay = 0;
+        this.pushbackForce = 0 ;
 
     }
 
@@ -96,7 +97,7 @@ export class Enemy {
             this.receiveDmg = false;
         }
         if (this.sprite!= undefined){
-            this.sprite.position.x+=20;
+            this.sprite.position.x+=this.pushbackForce;
         }
         
     }
@@ -132,6 +133,7 @@ export class Enemy {
                 let isCollision = this.collisionCheck(this, this.game.activeProjectiles[i]);
                 if(isCollision){
                     let towerType = this.game.activeProjectiles[i].tower.type;
+                    this.pushbackForce = this.game.activeProjectiles[i].tower.pushbackForce;
                     switch (towerType) {
                         case TowerType.EARTH:
                             console.log('EARTH ATACKED');
