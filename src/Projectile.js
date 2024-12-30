@@ -106,7 +106,6 @@ export class Projectile{
         this.lifeTimeCounter = 0;
         this.setAtack(0)
         this.isActive = false;
-        // this.sprite.visible = false;
         for (let i = 0; i < this.activeList.length; i++) {
             if(this.activeList[i] == this){
                 this.activeList.splice(i,1);

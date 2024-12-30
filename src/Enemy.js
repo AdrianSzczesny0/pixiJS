@@ -75,10 +75,10 @@ export class Enemy {
             this.flash('white');
             
         }
-        if(this.pushBackTimer>7){
+        if(this.pushBackTimer>3){
             this.invulnerable = false;
         }
-        if(this.pushBackTimer>10){
+        if(this.pushBackTimer>5){
             this.pushBackTimer = 0;
             this.state = EnemyState.WALKING;
             this.drawDmgTaken();
@@ -87,7 +87,7 @@ export class Enemy {
             this.receiveDmg = false;
         }
         if (this.sprite!= undefined){
-            this.sprite.position.x+=10;
+            this.sprite.position.x+=20;
         }
         
     }
