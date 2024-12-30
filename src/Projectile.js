@@ -35,6 +35,8 @@ export class Projectile{
         this.sprite;
         this.lifeTimeCounter = 0;
         this.isVisible = false;
+        this.tower = undefined;
+        this.hitTargets = 0;
         this.init();
     }
     async init(){
@@ -88,7 +90,9 @@ export class Projectile{
     }
 
 
-    reset(x,y){
+    reset(x,y,tower){
+        this.tower = tower;
+        console.log(this.tower);
         this.isActive = true;
         this.isVisible = true;
         this.sprite.visible = true;
@@ -96,6 +100,7 @@ export class Projectile{
         this.sprite.position.y = y;
         this.x = x;
         this.y = y;
+        this.moveSpeed = tower.projectileSpeed;
     }
 
     setMoveSpeed(value){

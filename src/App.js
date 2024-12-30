@@ -119,7 +119,7 @@ export class App{
             const data = e.detail.data;
             if(this.projectilePool.length>0){
                 const projectile = this.projectilePool[0];
-                projectile.reset(data.x, data.y);
+                projectile.reset(data.x, data.y, data.towerDetails);
                 // console.log(data.towerDetails.atack.curent);
                 projectile.setAtack(data.towerDetails.atack.curent);
                 // console.log(projectile.sprite.visible);

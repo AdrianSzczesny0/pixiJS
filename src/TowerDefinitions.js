@@ -17,11 +17,12 @@ export const getTowerDetails = (towerType) =>{
                 },
                 atack:{
                     level:1,
-                    curent:20,
+                    curent:30,
                     increasePerLevel: [ 5, 20, 30, 45, 60, 80, 85, 100, 120 ],
                     pricePerUpgrade: [ 100,200,300,400, 500,700,900, 1500, 2500 ]
                 },  
-                atackSpeed:10
+                atackSpeed:10,
+                projectileSpeed:10
             }
             break;
         case TowerType.WATER:
@@ -36,12 +37,13 @@ export const getTowerDetails = (towerType) =>{
                 },
                 atack:{
                     level:1,
-                    curent:5,
+                    curent:15,
                     increasePerLevel: [ 2, 3, 5, 10, 15, 20, 25, 30, 35 ],
                     pricePerUpgrade: [ 100,200,300,400, 500,700,900, 1500, 2500 ],
                     slowAmount: [ 5, 10, 15, 20, 25, 30, 35, 40, 45]
                 },  
-                atackSpeed:10
+                atackSpeed:10,
+                projectileSpeed:12
             }
             break;
         case TowerType.FIRE:
@@ -50,7 +52,7 @@ export const getTowerDetails = (towerType) =>{
                 health:{
                     level:1,
                     max:30,
-                    curent:30,
+                    curent:20,
                     increasePerLevel: [ 100, 100, 200, 400, 400, 500, 500, 700, 1000 ],
                     pricePerUpgrade:  [ 100, 150, 200, 500, 600, 800, 1000, 1300, 2000  ]
                 },
@@ -61,7 +63,8 @@ export const getTowerDetails = (towerType) =>{
                     pricePerUpgrade: [ 100,200,300,400, 500,700,900, 1500, 2500 ],
                     burnAmount: [ 5, 10, 15, 20, 25, 30, 35, 40, 45]
                 },  
-                atackSpeed:10
+                atackSpeed:8,
+                projectileSpeed:15
             }
             break;
         case TowerType.WIND:
@@ -76,12 +79,13 @@ export const getTowerDetails = (towerType) =>{
                 },
                 atack:{
                     level:1,
-                    curent:20,
+                    curent:10,
                     increasePerLevel: [ 10, 10, 15, 25, 35, 45, 55, 60, 60 ],
                     pricePerUpgrade: [ 100,200,300,400, 500,700,900, 1500, 2500 ],
                     pushBack: [ 5, 10, 15, 20, 25, 30, 35, 40, 45]
                 },  
-                atackSpeed:30
+                atackSpeed:5.5,
+                projectileSpeed:30
             }
             break;
         default:

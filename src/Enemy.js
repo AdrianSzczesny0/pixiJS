@@ -1,4 +1,5 @@
 import { Assets, Sprite } from "pixi.js";
+import { TowerType } from "./Types";
 
 export const EnemyState = {
     IDLE: 'IDLE',
@@ -24,7 +25,7 @@ export class Enemy {
         this.state = EnemyState.WALKING;
         this.sprite;
         this.stats = {
-            currentHp : 200,
+            currentHp : 120,
             moveSpeed: 5
         }
         this.level = level;
@@ -37,6 +38,13 @@ export class Enemy {
         this.receiveDmg = false;
         this.isDead = false;
         this.invulnerable = false;
+        this.isBurning = false;
+        this.isSlowed = false;
+        this.slowTimer = 0;
+        this.slowAmount = 0;
+        this.burningTimer = 0;
+        this.burAmount = 0;
+
     }
 
     init(){
@@ -62,7 +70,7 @@ export class Enemy {
     move(){
         if(this.state == EnemyState.WALKING){
             if (this.sprite!= undefined){
-                this.sprite.position.x-= this.stats.moveSpeed;
+                this.sprite.position.x-= (this.stats.moveSpeed - this.slowAmount);
             }
         }
     }
@@ -120,6 +128,25 @@ export class Enemy {
             for (let i = 0; i < this.game.activeProjectiles.length; i++) {
                 let isCollision = this.collisionCheck(this, this.game.activeProjectiles[i]);
                 if(isCollision){
+                    let towerType = this.game.activeProjectiles[i].tower.type;
+                    switch (towerType) {
+                        case TowerType.EARTH:
+                            console.log('EARTH ATACKED');
+                            break;
+                        case TowerType.WATER:
+                            console.log('WATER ATACKED');
+                            this.isSlowed = true;
+                            break;
+                        case TowerType.FIRE:
+                            console.log('FIRE ATACKED');
+                            break;
+                        case TowerType.WIND:
+                            console.log('WIND ATACKED');
+                            break;
+                        default:
+                            break;
+
+                    }
                     this.receiveDmgAmount = this.game.activeProjectiles[i].atack;
                     console.log(`receive dmhg : ${this.receiveDmgAmount}`);
                     this.state= EnemyState.HIT;
@@ -161,7 +188,29 @@ export class Enemy {
         this.checkForCollision();
         this.stateHandler();
         this.collisionCounter+=0.1;
+        this.slow();
+        this.burn();
         
+    }
+    burn(){
+        if(this.isBurning){
+            this.burningTimer+=0.1;
+        }
+        if(this.burningTimer>=5){
+            this.isBurning = false;
+            this.burningTimer = 0;
+        }
+    }
+    slow(){
+        if(this.isSlowed){
+            this.slowAmount = 2;
+            this.slowTimer+=0.1;
+        }
+        if(this.slowTimer>=4){
+            this.isSlowed = false;
+            this.slowTimer = 0;
+            this.slowAmount = 0;
+        }
     }
 
     flash(color){
