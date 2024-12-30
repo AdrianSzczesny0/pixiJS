@@ -44,6 +44,7 @@ export class Enemy {
         this.slowAmount = 0;
         this.burningTimer = 0;
         this.burAmount = 0;
+        this.burnDelay = 0;
 
     }
 
@@ -89,7 +90,7 @@ export class Enemy {
         if(this.pushBackTimer>5){
             this.pushBackTimer = 0;
             this.state = EnemyState.WALKING;
-            this.drawDmgTaken();
+            this.drawDmgTaken(this.receiveDmgAmount);
             this.stats.currentHp-= this.receiveDmgAmount;
             this.receiveDmgAmount = 0;
             this.receiveDmg = false;
@@ -103,8 +104,8 @@ export class Enemy {
     hit(){
         this.pushBack();
     }
-    drawDmgTaken(){
-        this.game.textObjectPooler.moveToActivePool(this.receiveDmgAmount,this.sprite.x, this.sprite.y);
+    drawDmgTaken(amount){
+        this.game.textObjectPooler.moveToActivePool(amount,this.sprite.x, this.sprite.y);
         console.log(this.game.textObjectPooler.active);
     }
 
@@ -139,6 +140,8 @@ export class Enemy {
                             break;
                         case TowerType.FIRE:
                             console.log('FIRE ATACKED');
+                            this.isBurning = true;
+                            this.burnAmount = 5;
                             break;
                         case TowerType.WIND:
                             console.log('WIND ATACKED');
@@ -155,21 +158,9 @@ export class Enemy {
                     break;
                 }
             }
-            // this.game.activeProjectiles.forEach(particle => {
-            //     // console.log(`particle: ${particle}`);
-            //     let isCollision = this.collisionCheck(this, particle);
-            //     // console.log(`collision: ${isCollision}`);
-            //     if(isCollision){
-            //         this.receiveDmgAmount = particle.atack;
-            //         console.log(`receive dmhg : ${this.receiveDmgAmount}`);
-            //         this.state= EnemyState.HIT;
-            //         console.log(this.state)
-            //         particle.setInactive();
-            //     }
-            // });
-            // this.collisionCounter = 0;
         }
     }
+
     collisionCheck(obj1,obj2){
         let rect1 = obj1.sprite;
         let rect2 = obj2.sprite;
@@ -196,9 +187,19 @@ export class Enemy {
         if(this.isBurning){
             this.burningTimer+=0.1;
         }
-        if(this.burningTimer>=5){
+        if(this.burningTimer>=10){
             this.isBurning = false;
             this.burningTimer = 0;
+            this.burnAmount = 0;
+        }
+        if(this.isBurning){
+            console.log('IS BURNING!!');
+            this.burnDelay+=0.1;
+            if(this.burnDelay>=2){
+                this.stats.currentHp -=this.burAmount;
+                this.burnDelay = 0;
+                this.drawDmgTaken(this.burnAmount);
+            }
         }
     }
     slow(){
