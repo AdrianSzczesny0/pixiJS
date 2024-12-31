@@ -84,7 +84,7 @@ export class Projectile{
             this.move();
             this.checkForColision();
         }
-        if(this.lifeTimeCounter >= 300){
+        if(this.lifeTimeCounter >= 100){
             this.setInactive();
             
         }

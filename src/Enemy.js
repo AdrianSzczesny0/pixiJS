@@ -57,7 +57,7 @@ export class Enemy {
 
     async draw(){
         const enemeyTexture = await Assets.load("./src/assets/enemy.png");
-        this.sprite = new Sprite(enemeyTexture);
+        this.sprite = new Sprite({texture: enemeyTexture , label:'enemy'});
         this.sprite.scale.set(2.5,3);
         this.sprite.position.set(this.x, this.y);
         this.parent.addChild(this.sprite);
