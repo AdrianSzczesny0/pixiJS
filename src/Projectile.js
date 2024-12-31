@@ -156,6 +156,7 @@ export class Projectile{
             };
         }
         this.inactiveList.push(this);
+        this.sprite.visible = false;
         this.sprite.position.y = 100;
         this.sprite.position.x -=500;
     }
