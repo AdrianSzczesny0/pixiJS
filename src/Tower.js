@@ -46,7 +46,7 @@ export class Tower{
         this.sprite.position.set(this.x, this.y);
         this.parent.addChild(this.sprite);
         this.sprite.anchor.set(0.5, 1);
-        this.sprite.scale.set(4);
+        this.sprite.scale.set(3.5);
         this.sprite.zIndex = this.sprite.position.y;
     }
     update(){
