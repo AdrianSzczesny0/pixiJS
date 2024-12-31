@@ -53,7 +53,7 @@ export class Tile {
         parent.addChild(graph);
     }
    async drawTower(){
-        this.tower = new Tower(this.x,this.y,this.towerType,this.parent,this.app);
+        this.tower = new Tower(this.x+this.sprite.width/2,this.y + this.sprite.height/1.3,this.towerType,this.parent,this.app);
         this.tower.towerDetails = getTowerDetails(this.towerType);
     }
     addPointerOverEvent(){

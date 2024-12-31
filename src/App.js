@@ -118,7 +118,7 @@ export class App{
             const data = e.detail.data;
             if(this.projectilePool.length>0){
                 const projectile = this.projectilePool[0];
-                projectile.reset(data.x, data.y, data.towerDetails);
+                projectile.reset(data.x, data.y-150, data.towerDetails);
                 projectile.setAtack(data.towerDetails.atack.curent);
                 moveFromListToList(this.projectilePool,this.activeProjectiles,0);
             }

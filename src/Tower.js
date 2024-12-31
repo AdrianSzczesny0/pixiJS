@@ -42,9 +42,10 @@ export class Tower{
             default:
                 break;
         }
-        this.sprite = new Sprite(this.towerTexture);
-        this.sprite.position.set(this.x+45, this.y-180);
+        this.sprite = new Sprite({texture:this.towerTexture , label:'tower'});
+        this.sprite.position.set(this.x, this.y);
         this.parent.addChild(this.sprite);
+        this.sprite.anchor.set(0.5, 1);
         this.sprite.scale.set(4);
         this.sprite.zIndex = this.sprite.position.y;
     }
