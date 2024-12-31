@@ -115,17 +115,13 @@ export class App{
         });
 
         window.addEventListener(EVENTS.TOWER.ATACK, (e) =>{
-            this.enemiesActive.forEach(enemy => {
-                if(enemy.sprite.position.x <=window.innerWidth-200){
-                    const data = e.detail.data;
-                    if(this.projectilePool.length>0){
-                        const projectile = this.projectilePool[0];
-                        projectile.reset(data.x, data.y, data.towerDetails);
-                        projectile.setAtack(data.towerDetails.atack.curent);
-                        moveFromListToList(this.projectilePool,this.activeProjectiles,0);
-                    }
-                }
-            });
+            const data = e.detail.data;
+            if(this.projectilePool.length>0){
+                const projectile = this.projectilePool[0];
+                projectile.reset(data.x, data.y, data.towerDetails);
+                projectile.setAtack(data.towerDetails.atack.curent);
+                moveFromListToList(this.projectilePool,this.activeProjectiles,0);
+            }
         });
 
         // PROJECTILE EVENTS
@@ -292,14 +288,6 @@ export class App{
 
 
         this.scene = new Scene(this.app, this);
-            // this.shop = new Shop(this.app.stage);
-
-       
-
-
-
-
-        // this.setShopDetails('0');
         this.towerDetails.innerHTML = '';
         this.addGameEventListeners();
         this.setInitValues();
@@ -313,25 +301,6 @@ export class App{
         let active = [];
         let waveDelayCounter = 0;
 
-
-
-        //test move from list to list
-        const list1 = 
-        [
-            {name:'test0', id:0},
-            {name:'test1', id:1},
-            {name:'test2', id:2},
-        ]
-        const list2 = 
-        [
-            {name:'test3', id:3},
-            {name:'test4', id:4},
-            {name:'test5', id:5},
-        ]
-     
-
-        const testText = new Text({text:'test'});
-        this.app.stage.addChild(testText);
         game.textObjectPooler = new TextObjectPooler(30,this.game, this.app.stage);
 
         this.app.ticker.add(function(ticker){
@@ -343,7 +312,7 @@ export class App{
             }
             moveMobs(enemyList);
             towersAtack(playerTower);
-            updateProjectiles(activeProjectiles);
+            updateProjectiles(activeProjectiles,ticker.deltaTime);
             updateTextObjectws(game.textObjectPooler.active);
             game.textObjectPooler.update();
         });
@@ -360,10 +329,10 @@ function updateTextObjectws(list){
 }
 
 
-function updateProjectiles(list){
+function updateProjectiles(list,delta){
     list.forEach(element =>{
         if(element!=undefined){
-            element.update();
+            element.update(delta);
         }
     })
 }

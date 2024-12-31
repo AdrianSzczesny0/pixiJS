@@ -22,7 +22,7 @@ export const getTowerDetails = (towerType) =>{
                     pricePerUpgrade: [ 100,200,300,400, 500,700,900, 1500, 2500 ]
                 },  
                 atackSpeed:10,
-                projectileSpeed:10,
+                projectileSpeed:40,
                 pushbackForce: 8
             }
             break;

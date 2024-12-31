@@ -63,11 +63,13 @@ export class Enemy {
         this.parent.addChild(this.sprite);
         this.w = this.sprite.width;
         this.h = this.sprite.height;
+        this.sprite.zIndex = this.sprite.position.y;
     }
 
     reset(){
         this.x = this.initialPosition.x;
         this.y = this.initialPosition.y;
+        this.sprite.zIndex = this.sprite.position.y;
     }
 
     move(){
@@ -86,9 +88,9 @@ export class Enemy {
             this.flash('white');
             
         }
-        if(this.pushBackTimer>3){
-            this.invulnerable = false;
-        }
+        // if(this.pushBackTimer>3){
+            
+        // }
         if(this.pushBackTimer>5){
             this.pushBackTimer = 0;
             this.state = EnemyState.WALKING;
@@ -96,6 +98,7 @@ export class Enemy {
             this.stats.currentHp-= this.receiveDmgAmount;
             this.receiveDmgAmount = 0;
             this.receiveDmg = false;
+            this.invulnerable = false;
         }
         if (this.sprite!= undefined){
             this.sprite.position.x+=this.pushbackForce;
@@ -109,7 +112,6 @@ export class Enemy {
 
     drawDmgTaken(amount,color){
         this.game.textObjectPooler.moveToActivePool(color,amount, this.sprite.x, this.sprite.y);
-        console.log(this.game.textObjectPooler.active);
     }
 
     stateHandler(){
@@ -137,35 +139,32 @@ export class Enemy {
                     this.pushbackForce = this.game.activeProjectiles[i].tower.pushbackForce;
                     switch (towerType) {
                         case TowerType.EARTH:
-                            console.log('EARTH ATACKED');
                             break;
                         case TowerType.WATER:
-                            console.log('WATER ATACKED');
                             this.isSlowed = true;
                             break;
                         case TowerType.FIRE:
-                            console.log('FIRE ATACKED');
                             this.isBurning = true;
                             this.burnAmount = 5;
                             break;
                         case TowerType.WIND:
-                            console.log('WIND ATACKED');
                             break;
                         default:
                             break;
 
                     }
                     if(this.lastDmgDealer != this.game.activeProjectiles[i]){
-                        this.lastDmgDealer = this.game.activeProjectiles[i];
-                        this.receiveDmgAmount = this.game.activeProjectiles[i].atack;
-                        this.state= EnemyState.HIT;
+                        if(this.game.activeProjectiles[i].sprite.visible){
+                            this.lastDmgDealer = this.game.activeProjectiles[i];
+                            this.receiveDmgAmount = this.game.activeProjectiles[i].atack;
+                            this.state= EnemyState.HIT;
+                        }
                         if(towerType!=TowerType.WATER){
-                            console.log(towerType);
                             this.game.activeProjectiles[i].setInactive();
                         }
+                        break;
                         
                     }
-                    break;
                 }
             }
         }
@@ -204,7 +203,6 @@ export class Enemy {
             this.burnAmount = 0;
         }
         if(this.isBurning){
-            console.log('IS BURNING!!');
             this.burnDelay+=0.1;
             if(this.burnDelay>=2){
                 this.stats.currentHp -=this.burAmount;

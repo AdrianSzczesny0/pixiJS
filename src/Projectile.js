@@ -1,6 +1,7 @@
 import { Assets, Sprite } from "pixi.js";
 import { createEvent } from "./Utils";
 import { EVENTS } from "./Events";
+import { TowerType } from "./Types";
 
 export const PROJECTILE_TYPE = {
     EARTH: 'EARTH',
@@ -37,13 +38,14 @@ export class Projectile{
         this.isVisible = false;
         this.tower = undefined;
         this.hitTargets = 0;
+        this.animationTime = 0;
         this.init();
     }
     async init(){
         this.earthTexture = await Assets.load('./src/assets/earthAtk.png');
-        this.waterTexture = await Assets.load('./src/assets/earthAtk.png');
-        this.fireTexture = await Assets.load('./src/assets/earthAtk.png');
-        this.windTexture = await Assets.load('./src/assets/earthAtk.png');
+        this.waterTexture = await Assets.load('./src/assets/waterAtk.png');
+        this.fireTexture = await Assets.load('./src/assets/fireAtk.png');
+        this.windTexture = await Assets.load('./src/assets/windAtk.png');
         this.x = this.startingPosition.x;
         this.y = this.startingPosition.y;
         this.draw();
@@ -53,18 +55,30 @@ export class Projectile{
     draw(){
         switch(this.type){
             case PROJECTILE_TYPE.EARTH:
-            this.sprite = new Sprite({texture: this.earthTexture, label: 'particle' });
-            this.sprite.position.set(this.x, this.y);
-            this.sprite.scale.set(2,2);
-            this.sprite.visible = false;
-            this.parent.addChild(this.sprite);
-            this.w = this.sprite.width;
-            this.h = this.sprite.height;
-            break;
+                this.sprite = new Sprite({texture: this.earthTexture, label: 'particle' });
+                break;
+            
+            case PROJECTILE_TYPE.WATER:
+                this.sprite = new Sprite({texture: this.waterTexture, label: 'particle' });
+                break;
+            case PROJECTILE_TYPE.FIRE:
+                this.sprite = new Sprite({texture: this.fireTexture, label: 'particle' });
+                break;
+            
+            case PROJECTILE_TYPE.WIND:
+                this.sprite = new Sprite({texture: this.windTexture, label: 'particle' });
+                break;  
         }
+        this.sprite.position.set(this.x, this.y);
+        this.sprite.scale.set(2,2);
+        this.sprite.visible = false;
+        this.sprite.anchor.set(0.5,0.5);
+        this.parent.addChild(this.sprite);
+        this.w = this.sprite.width;
+        this.h = this.sprite.height;
     }
 
-    update(){
+    update(delta){
         if(this.isActive){
             this.lifeTimeCounter++;
             this.move();
@@ -74,6 +88,11 @@ export class Projectile{
             this.setInactive();
             
         }
+        this.animationTime+= 0.01;
+        if(this.animationTime>2){
+            this.animationTime =0.4;
+        }
+        this.animate();
     }
 
 
@@ -92,15 +111,35 @@ export class Projectile{
 
     reset(x,y,tower){
         this.tower = tower;
-        console.log(this.tower);
         this.isActive = true;
         this.isVisible = true;
         this.sprite.visible = true;
         this.sprite.position.x = x+100;
         this.sprite.position.y = y;
+        this.sprite.zIndex = this.sprite.position.y;
         this.x = x;
         this.y = y;
         this.moveSpeed = tower.projectileSpeed;
+        this.type = tower.type;
+        this.setSprite();
+    }
+    setSprite(){
+    switch(this.type){
+        case TowerType.EARTH:
+            this.sprite.texture = this.earthTexture;
+            break;
+        
+        case TowerType.WATER:
+            this.sprite.texture = this.waterTexture;
+            break;
+        case TowerType.FIRE:
+            this.sprite.texture = this.fireTexture;
+            break;
+        
+        case TowerType.WIND:
+            this.sprite.texture = this.windTexture;
+            break;  
+    }
     }
 
     setMoveSpeed(value){
@@ -117,8 +156,8 @@ export class Projectile{
             };
         }
         this.inactiveList.push(this);
-        this.sprite.visible = false;
         this.sprite.position.y = 100;
+        this.sprite.position.x -=500;
     }
     
 
@@ -129,6 +168,9 @@ export class Projectile{
     setPosition(x,y){
         this.x = x;
         this.y = y;
+    }
+    animate(){
+        this.sprite.scale.set(1, Math.cos(this.animationTime*3)+1.2);
     }
 
 }

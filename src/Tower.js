@@ -16,7 +16,7 @@ export class Tower{
         this.towerDetails;
         this.sprite;
         this.takeDmg = false;
-        this.atack = true;
+        this.atack = false;
         this.currentTarget = null;
         this.projectileList;
         this.atackCounter = 0;
@@ -46,8 +46,10 @@ export class Tower{
         this.sprite.position.set(this.x+45, this.y-180);
         this.parent.addChild(this.sprite);
         this.sprite.scale.set(4);
+        this.sprite.zIndex = this.sprite.position.y;
     }
     update(){
+        this.checkIfEnemyInRange();
         this.attack();
         this.takeDamage();
     }
@@ -63,6 +65,20 @@ export class Tower{
                 createEvent(EVENTS.TOWER.ATACK , {x:this.x, y:this.y, towerDetails:this.towerDetails});
                 this.atackCounter = 0;
             }
+        }
+    }
+    checkIfEnemyInRange(){
+        for (let i = 0; i < this.app.enemiesActive.length; i++) {
+            if(this.sprite!=undefined){
+                if(this.app.enemiesActive[i].sprite.position.x - this.sprite.position.x <= 2000){
+                    console.log('ENEMY IN RANGE');
+                    this.atack = true;
+                    break;
+                }else{
+                    console.log('ENEMY NOT IN RANGE');
+                    this.atack = false;
+                }
+            }            
         }
     }
 }
