@@ -72,6 +72,9 @@ export class damageText{
     setVisible(){
         this.textSprite.visible = true;
     }
+    setInvisible(){
+        this.textSprite.visible = false;
+    }
 
     draw(){
         this.textSprite = new Text({
@@ -93,7 +96,7 @@ export class damageText{
         this.textSprite.position.y = this.y;
         this.parent.addChild(this.textSprite);
         this.isActive = false;
-        this.setVisible();
+        this.setInvisible();
     }
 
     init(){

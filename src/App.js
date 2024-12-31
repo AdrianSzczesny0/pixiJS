@@ -315,6 +315,7 @@ export class App{
             updateProjectiles(activeProjectiles,ticker.deltaTime);
             updateTextObjectws(game.textObjectPooler.active);
             game.textObjectPooler.update();
+            console.log(game.enemiesActive);
         });
         
     }

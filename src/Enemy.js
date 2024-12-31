@@ -99,11 +99,20 @@ export class Enemy {
             this.receiveDmgAmount = 0;
             this.receiveDmg = false;
             this.invulnerable = false;
+            
         }
         if (this.sprite!= undefined){
             this.sprite.position.x+=this.pushbackForce;
         }
-        
+    }
+    removeFromActiveEnemies(){
+        for (let i = 0; i < this.game.enemiesActive.length; i++) {
+            if(this == this.game.enemiesActive[i]){
+                this.game.enemiesActive.splice(i,1);
+                this.game.enemiesInactive.push(this);
+                break;
+            }
+        }
     }
 
     hit(){
@@ -184,6 +193,7 @@ export class Enemy {
             this.isActive = false;
             this.sprite.visible = false;
             this.isDead = true;
+            this.removeFromActiveEnemies();
         }
         this.checkForCollision();
         this.stateHandler();

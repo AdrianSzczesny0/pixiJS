@@ -69,17 +69,21 @@ export class Tower{
         }
     }
     checkIfEnemyInRange(){
-        for (let i = 0; i < this.app.enemiesActive.length; i++) {
-            if(this.sprite!=undefined){
-                if(this.app.enemiesActive[i].sprite.position.x - this.sprite.position.x <= 2000){
-                    console.log('ENEMY IN RANGE');
-                    this.atack = true;
-                    break;
-                }else{
-                    console.log('ENEMY NOT IN RANGE');
-                    this.atack = false;
-                }
-            }            
+        if(this.app.enemiesActive.length>0){
+            for (let i = 0; i < this.app.enemiesActive.length; i++) {
+                if(this.sprite!=undefined){
+                    if(this.app.enemiesActive[i].sprite.position.x - this.sprite.position.x <= 2000){
+                        console.log('ENEMY IN RANGE');
+                        this.atack = true;
+                        break;
+                    }else{
+                        console.log('ENEMY NOT IN RANGE');
+                        this.atack = false;
+                    }
+                }            
+            }
+        }else{
+            this.atack = false;
         }
     }
 }
