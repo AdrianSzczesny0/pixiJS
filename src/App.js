@@ -108,32 +108,29 @@ export class App{
         });
 
         window.addEventListener(EVENTS.TOWER.DRAW, (e) =>{
-            // console.log('tower upgrade');
+
             this.scene.tiles.getTileByID(this.selectedTileId).drawTower();
             this.playerTowers.push(this.scene.tiles.getTileByID(this.selectedTileId).tower);
-            // console.log(this);
+
         });
 
         window.addEventListener(EVENTS.TOWER.ATACK, (e) =>{
-            // console.log(e);
-            const data = e.detail.data;
-            if(this.projectilePool.length>0){
-                const projectile = this.projectilePool[0];
-                projectile.reset(data.x, data.y, data.towerDetails);
-                // console.log(data.towerDetails.atack.curent);
-                projectile.setAtack(data.towerDetails.atack.curent);
-                // console.log(projectile.sprite.visible);
-                moveFromListToList(this.projectilePool,this.activeProjectiles,0);
-                // console.log('active list:' +this.activeProjectiles.length);
-                // console.log('inactive list:' +this.projectilePool.length);
-            }
+            this.enemiesActive.forEach(enemy => {
+                if(enemy.sprite.position.x <=window.innerWidth-200){
+                    const data = e.detail.data;
+                    if(this.projectilePool.length>0){
+                        const projectile = this.projectilePool[0];
+                        projectile.reset(data.x, data.y, data.towerDetails);
+                        projectile.setAtack(data.towerDetails.atack.curent);
+                        moveFromListToList(this.projectilePool,this.activeProjectiles,0);
+                    }
+                }
+            });
         });
 
         // PROJECTILE EVENTS
         window.addEventListener(EVENTS.PROJECTILE.RESET, (e) =>{
             let index = e.detail.data;
-            // console.log(e);
-            // console.log(`projectile index: ${index}`);
             for (let i = 0; i < this.activeProjectiles; i++) {
                 if(this.activeProjectiles[i].id == e.detrail.data){
                     let projectile = this.activeProjectiles[i];

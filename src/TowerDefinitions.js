@@ -38,14 +38,14 @@ export const getTowerDetails = (towerType) =>{
                 },
                 atack:{
                     level:1,
-                    curent:15,
+                    curent:8,
                     increasePerLevel: [ 2, 3, 5, 10, 15, 20, 25, 30, 35 ],
                     pricePerUpgrade: [ 100,200,300,400, 500,700,900, 1500, 2500 ],
                     slowAmount: [ 5, 10, 15, 20, 25, 30, 35, 40, 45]
                 },  
                 atackSpeed:10,
-                projectileSpeed:12,
-                pushbackForce: 5
+                projectileSpeed:30,
+                pushbackForce: -1
             }
             break;
         case TowerType.FIRE:
@@ -66,7 +66,7 @@ export const getTowerDetails = (towerType) =>{
                     burnAmount: [ 5, 10, 15, 20, 25, 30, 35, 40, 45]
                 },  
                 atackSpeed:8,
-                projectileSpeed:15,
+                projectileSpeed:45,
                 pushbackForce: 5
             }
             break;
@@ -88,7 +88,7 @@ export const getTowerDetails = (towerType) =>{
                     pushBack: [ 5, 10, 15, 20, 25, 30, 35, 40, 45]
                 },  
                 atackSpeed:5.5,
-                projectileSpeed:30,
+                projectileSpeed:60,
                 pushbackForce: 20
             }
             break;

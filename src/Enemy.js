@@ -46,6 +46,7 @@ export class Enemy {
         this.burAmount = 0;
         this.burnDelay = 0;
         this.pushbackForce = 0 ;
+        this.lastDmgDealer = undefined;
 
     }
 
@@ -154,11 +155,16 @@ export class Enemy {
                             break;
 
                     }
-                    this.receiveDmgAmount = this.game.activeProjectiles[i].atack;
-                    console.log(`receive dmhg : ${this.receiveDmgAmount}`);
-                    this.state= EnemyState.HIT;
-                    this.game.activeProjectiles[i].setInactive();
-                    console.log(this.state);
+                    if(this.lastDmgDealer != this.game.activeProjectiles[i]){
+                        this.lastDmgDealer = this.game.activeProjectiles[i];
+                        this.receiveDmgAmount = this.game.activeProjectiles[i].atack;
+                        this.state= EnemyState.HIT;
+                        if(towerType!=TowerType.WATER){
+                            console.log(towerType);
+                            this.game.activeProjectiles[i].setInactive();
+                        }
+                        
+                    }
                     break;
                 }
             }
