@@ -73,11 +73,9 @@ export class Tower{
             for (let i = 0; i < this.app.enemiesActive.length; i++) {
                 if(this.sprite!=undefined){
                     if(this.app.enemiesActive[i].sprite.position.x - this.sprite.position.x <= 2000){
-                        console.log('ENEMY IN RANGE');
                         this.atack = true;
                         break;
                     }else{
-                        console.log('ENEMY NOT IN RANGE');
                         this.atack = false;
                     }
                 }            

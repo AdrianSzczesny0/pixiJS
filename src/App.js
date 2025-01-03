@@ -86,25 +86,19 @@ export class App{
                 this.selectedTileId = e.detail.data.id;
             }
             this.buyPrice = 0;
-            // console.log(this.scene.tiles.getTileByID(this.selectedTileId));
-            // console.log(this);
         })
 
         // Tower events
         window.addEventListener(EVENTS.TOWER.OPEN, (e) =>{
-            // console.log('tower details opened');
         });
 
         window.addEventListener(EVENTS.TOWER.CLOSE, (e) =>{
-            // console.log('tower details closed');
         });
 
         window.addEventListener(EVENTS.TOWER.SELL, (e) =>{
-            // console.log('tower sell');
         });
 
         window.addEventListener(EVENTS.TOWER.UPGRADE, (e) =>{
-            // console.log('tower upgrade');
         });
 
         window.addEventListener(EVENTS.TOWER.DRAW, (e) =>{
@@ -133,20 +127,17 @@ export class App{
                     moveFromListToList(this.activeProjectiles,this.projectilePool, index);
                 }
             }
-            // console.log(this.projectilePool);
         });
 
 
         // SHOP Events
         window.addEventListener(EVENTS.SHOP.OPEN, (e) =>{
-            // console.log('Shop opened');
             this.shopModal.classList.remove('hidden');
             this.towerCost.innerHTML = 0;
             this.towerDetails.innerHTML = '';
         });
 
         window.addEventListener(EVENTS.SHOP.CLOSE, (e) =>{
-            // console.log('Shop closed');
             this.deselectAllOptions(this.shopOptions);
             this.scene.tiles.setAllTilesStateToDefault();
             this.shopModal.classList.add('hidden');
@@ -154,7 +145,6 @@ export class App{
         });
 
         window.addEventListener(EVENTS.SHOP.BUY, (e) =>{
-            // console.log('tower buy');
             let selectedTile = this.scene.tiles.getTileByID(this.selectedTileId);
 
             if(this.selectedTileId >= 0 && this.selectedTowerAtShop> 0){
@@ -164,7 +154,6 @@ export class App{
                         this.goldValue.innerHTML = this.gold;
                         this.setTowerType(this.selectedTowerAtShop, selectedTile);
                         createEvent(EVENTS.TOWER.DRAW);
-                        console.log(selectedTile)
                         this.selectedTileId = -1;
     
                     }else{
@@ -307,7 +296,6 @@ export class App{
             waveDelayCounter+=ticker.deltaTime;
             if(waveDelayCounter>=31){
                 waveDelayCounter = 0;
-                // console.log(game.projectilePool);
 
             }
             moveMobs(enemyList);
@@ -315,7 +303,6 @@ export class App{
             updateProjectiles(activeProjectiles,ticker.deltaTime);
             updateTextObjectws(game.textObjectPooler.active);
             game.textObjectPooler.update();
-            console.log(game.enemiesActive);
         });
         
     }
@@ -370,22 +357,9 @@ function createProjectilePool(app,active,inactive){
 }
 
 function moveFromListToList(fromList,toList, byID){
-    // console.log('LISTS BEFORE');
-    // console.log(fromList);
-    // console.log(toList);
     if(fromList.length> 0){
         toList.push(fromList[0]);
         fromList.splice(0,1);
     }
-    // for (let i = 0; i < fromList.length; i++) {
-    //     if( fromList[i].id == byID){
-    //         toList.push(fromList[i]);
-    //         fromList.splice(i,1);
-    //         break;
-    //     }
-    // } 
-    // console.log('LISTS AFTER');
-    // console.log(fromList);
-    // console.log(toList);
 
 }
