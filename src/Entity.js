@@ -1,4 +1,4 @@
-import { Container, Graphics, Sprite } from "pixi.js";
+import { Container, Graphics, Point, Polygon, Rectangle, Sprite } from "pixi.js";
 import { ACTIONS } from "./Actions";
 import { Border } from "./Border";
 
@@ -43,21 +43,18 @@ export class Enity {
             switch (this.game.action) {
                 case ACTIONS.MOVE:
                     if(this.game.selectedEntity == undefined || this.game.selectedEntity == null){
-                        this.sprite.tint = 'orange';
                         this.setAlpha(0.8);
-
                     }
                     break;
                 case ACTIONS.SCALE:
                     if(this.game.selectedEntity == undefined || this.game.selectedEntity == null){
-                        this.sprite.tint = 'red';
                         this.setAlpha(0.8);
                     }
                     break;
                 default:
                     break;
             }
-
+            this.sprite.cursor = 'grab';
         })
         this.sprite.on('mouseout', (e) =>{
             this.sprite.tint = 'white';
@@ -66,17 +63,19 @@ export class Enity {
         this.sprite.on('pointerdown', (e) =>{
             this.setShift();
             this.game.selectedEntity = this;
+            this.setAlpha(0.5);
+            this.sprite.tint='white';
         })
     }
     draw(){
         this.sprite = new Sprite({texture:this.texture, label: this.name});
         this.sprite.sortableChildren = true;
-        this.sprite.eventMode = "dynamic";
-        // this.sprite.anchor.set(0.5, 1);
+        this.sprite.eventMode = "static";
         this.sprite.position.set(this.position.x, this.position.y);
         this.sprite.zIndex = this.sprite.y;
         this.width = this.sprite.width;
         this.height = this.sprite.height;
+        this.sprite.hitArea = new Polygon([this.sprite.width*0.33, 0, this.sprite.width*0.66, 0, this.sprite.width*0.66, this.sprite.height, this.sprite.width*0.33, this.sprite.height]);
         this.zIndexShift = this.sprite.height/10;
         this.parent.addChild(this.sprite);
         this.drawBorder();
@@ -89,7 +88,6 @@ export class Enity {
     updateSpritePosition(x,y){
         this.sprite.position.x = x-this.shift.x;
         this.sprite.position.y = y-this.shift.y;
-        // this.updateBorderPosition();
     }
 
     updateBorderPosition(){

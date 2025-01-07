@@ -22,7 +22,6 @@ export class Game{
             try {
                 this.selectedEntity.setAlpha(1);
                 this.selectedEntity.updateZIndex();
-                this.selectedEntity.sprite.tint = 'white';
                 this.selectedEntity = null;
             } catch (error) {
                 
@@ -32,6 +31,8 @@ export class Game{
         window.addEventListener('mousemove', (e)=>{
             if(this.selectedEntity!= undefined || this.selectedEntity!= null){
                 this.selectedEntity.updateSpritePosition(this.mousePosition.x, this.mousePosition.y);
+                this.selectedEntity.updateZIndex();
+                this.selectedEntity.setAlpha(0.5);
             }
         })
         this.app.stage.on('mousemove', (e) =>{

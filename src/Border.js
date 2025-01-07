@@ -1,4 +1,5 @@
 import { Container, Graphics } from "pixi.js";
+import { Line } from "./Line";
 
 
 export class Border{
@@ -8,7 +9,12 @@ export class Border{
         this.w = w;
         this.h = h;
         this.graphic;
+        this.leftLine;
         this.parent = parent;
+        this.left;
+        this.right;
+        this.top;
+        this.right;
         this.init()
     }
 
@@ -19,22 +25,30 @@ export class Border{
     draw(){
         this.graphic = new Graphics();
         this.graphic.rect(0, 0, this.w, this.h);
-        // this.graphic.pivot.set(2, 1);
-        this.graphic.fill(0x650a5a);
-        this.graphic.alpha = 0.025;
+        this.graphic.alpha = 1;
         this.graphic.stroke({ width: 2, color: 0xff00ff });
-        
-        this.parent.addChild(this.graphic);
+        // this.top = new Line(1,10,10,this.graphic.width-10, 5, this.parent);
+        // this.bot = new Line(1,10,this.graphic.height-10,this.graphic.width-10, 5, this.parent);
+        // this.left = new Line(1,10,10,10, this.graphic.height-10, this.parent);
+        // this.right = new Line(1,this.graphic.width-10,10,10, this.graphic.height-10, this.parent);
     }
+
     update(){
         
     }
-
-    updatePosition(newX, newY){
-        this.x = newX;
-        this.y = newY;
-        this.graphic.position.x = this.x;
-        this.graphic.position.y = this.y;
+    hideBorders(){
+        this.left.hide();
+        this.right.hide();
+        this.top.hide();
+        this.bot.hide();
     }
+    showBorders(){
+        this.left.show();
+        this.right.show();
+        this.top.show();
+        this.bot.show();
+    }
+
+
 
 }
