@@ -51,6 +51,11 @@ export class Enity {
                         this.setAlpha(0.8);
                     }
                     break;
+                case ACTIONS.SCALE:
+                    if(this.game.selectedEntity == undefined || this.game.selectedEntity == null){
+                        this.setAlpha(0.8);
+                    }
+                    break;
                 default:
                     break;
             }
