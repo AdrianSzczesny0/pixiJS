@@ -8,6 +8,10 @@ export class Debug {
         this.header = document.querySelector(".header");
         this.debugContent = document.querySelector(".debugContentWrapper");
         this.grabbed = false;
+        this.grabbedOffest = {
+            x:0,
+            y:0
+        }
         this.init();
     }
 
@@ -25,6 +29,7 @@ export class Debug {
             this.header.classList.remove('grab');
             this.header.classList.toggle('grabbed');
             this.grabbed = true;
+            this.getOffset();
         })
         this.header.addEventListener('mouseup', (e)=>{
             this.header.classList.add('grab');
@@ -41,8 +46,16 @@ export class Debug {
         this.debugContent.classList.toggle('hidden');
     }
     updateWindowPosition(){
-        this.debugWindow.style.left = `${this.mousePosition.x-200}px`;
-        this.debugWindow.style.top = `${this.mousePosition.y}px`;
+        this.debugWindow.style.left = `${this.mousePosition.x-this.grabbedOffest.x}px`;
+        this.debugWindow.style.top = `${this.mousePosition.y-this.grabbedOffest.y}px`;
+    }
+    getOffset(){
+        let left = window.getComputedStyle(this.debugWindow,null).getPropertyValue('left');
+        left = Number(left.substring(0, left.length-2));
+        let top = window.getComputedStyle(this.debugWindow,null).getPropertyValue('top');
+        top = Number(top.substring(0, top.length-2));
+        this.grabbedOffest.x = this.mousePosition.x - left;
+        this.grabbedOffest.y = this.mousePosition.y - top;
     }
 
 }
