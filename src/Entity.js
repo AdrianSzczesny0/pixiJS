@@ -26,6 +26,7 @@ export class Enity {
             y:0
         }
         this.border;
+        this.grabbed = false;
         this.init();
     }
 
@@ -59,17 +60,22 @@ export class Enity {
                 default:
                     break;
             }
-            this.sprite.cursor = 'grab';
+            if(!this.grabbed){
+                this.sprite.cursor = 'grab';
+            }
         })
         this.sprite.on('mouseout', (e) =>{
             this.sprite.tint = 'white';
             this.setAlpha(1);
+            this.grabbed = false;
         })
         this.sprite.on('pointerdown', (e) =>{
+            this.grabbed = true;
             this.setShift();
             this.game.selectedEntity = this;
             this.setAlpha(0.5);
             this.sprite.tint='white';
+            this.sprite.cursor = 'grabbing';
         })
     }
     draw(){
