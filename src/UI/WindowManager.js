@@ -37,13 +37,16 @@ export class WindowManager{
         console.log(this.currentlySelected.modal.element.zIndex);
     }
 
-    addWindow(windowName,x,y,w,h){
-        const win = new Modal(this.list.length,x,y,w,h,windowName,this.mousePosition);
+    addWindow(windowName,x,y,w,h,parent){
+        const win = new Modal(this.list.length, x, y, w, h, windowName, this.mousePosition, parent);
         win.zIndex = this.list.length;
         this.list.push(win);
         this.currentlySelected = win;
         win.zIndex = this.list.length;
         this.maxZindex+=1;
+    }
+    getWindowElementByID(id){
+        return this.list[id];
     }
 
 }

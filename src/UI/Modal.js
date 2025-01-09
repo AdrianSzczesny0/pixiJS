@@ -3,7 +3,8 @@ import { HTML } from "./Html";
 
 
 export class Modal{
-    constructor(id,x,y,w,h,windowName,mousePosition){
+    constructor(id,x,y,w,h,windowName,mousePosition,parent){
+        this.parent = parent;
         this.id = id;
         this.x = x;
         this.y = y;
@@ -29,17 +30,21 @@ export class Modal{
     }
 
     createWindow(){
-        this.modal = new HTML('div', 'window', `window-${this.windowName}`, document.body);
+        let parent = this.parent == undefined  ? document.body : this.parent.modal.element;
+        console.log(this.parent);
+        let title = this.parent == undefined ? this.windowName : `${this.parent.windowName} --> ${this.windowName}`;
+        this.modal = new HTML('div', 'window', `window-${this.windowName}`,parent);
         this.modal.element.zIndex = this.id;
         this.modal.element.style.width = `${this.w}px`;
         this.modal.element.style.height = `${this.h}px`;
         this.headerElement = new HTML('div','header',`header-${this.id}`, this.modal.element);
         const headerTitle = new HTML('span','title',`title-${this.id}`, this.headerElement.element);
-        headerTitle.setValue(this.windowName);
+        headerTitle.setValue(title);
         this.minBtn = new HTML('div','minBtn',`minBtn-${this.id}`, this.headerElement.element);
         this.minBtn.setValue('--');
         this.contentElement = new HTML('div','contentWrapper',`content-${this.id}`, this.modal.element);
         this.contentElement.element.style.height = `${this.h-20}px`;
+        this.contentElement.element.style.opacity = this.parent == undefined ? 0.5 : 0.3;
         this.setWindowPositon();
     }
 
