@@ -7,6 +7,8 @@ export class Modal{
         this.id = id;
         this.x = x;
         this.y = y;
+        this.w = w;
+        this.h = h;
         this.windowName = windowName;
         this.mousePosition = mousePosition;
         this.headerElement;
@@ -29,12 +31,15 @@ export class Modal{
     createWindow(){
         this.modal = new HTML('div', 'window', `window-${this.windowName}`, document.body);
         this.modal.element.zIndex = this.id;
+        this.modal.element.style.width = `${this.w}px`;
+        this.modal.element.style.height = `${this.h}px`;
         this.headerElement = new HTML('div','header',`header-${this.id}`, this.modal.element);
         const headerTitle = new HTML('span','title',`title-${this.id}`, this.headerElement.element);
         headerTitle.setValue(this.windowName);
         this.minBtn = new HTML('div','minBtn',`minBtn-${this.id}`, this.headerElement.element);
         this.minBtn.setValue('--');
         this.contentElement = new HTML('div','contentWrapper',`content-${this.id}`, this.modal.element);
+        this.contentElement.element.style.height = `${this.h-20}px`;
         this.setWindowPositon();
     }
 

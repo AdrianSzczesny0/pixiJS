@@ -32,7 +32,6 @@ export class WindowManager{
     }
     selectWindow(windowID){
         this.currentlySelected = this.list[windowID];
-        // console.log(this.currentlySelected.modal.element.style.zIndex);
         this.currentlySelected.modal.element.style.zIndex = this.maxZindex+1;
         this.maxZindex++;
         console.log(this.currentlySelected.modal.element.zIndex);
