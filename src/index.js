@@ -1,16 +1,12 @@
-import { Debug } from "./Debug";
+
+import { Modal } from "./UI/Modal";
+import { WindowManager } from "./UI/WindowManager";
 import { App } from "./app";
 
-const mousePosition = {
-    x:0,
-    y:0
-}
 
-document.body.addEventListener('mousemove', (e)=>{
-    mousePosition.x = e.clientX;
-    mousePosition.y = e.clientY;
-})
-
-const app  =  new App
-const debug = new Debug(mousePosition);
+const app  =  new App();
+const windowManager = new WindowManager();
+windowManager.addWindow('Debug',100,100,300,500);
+windowManager.addWindow('Test',300,300,100,100);
+windowManager.addWindow('Navigation',600,300,100,100);
 
