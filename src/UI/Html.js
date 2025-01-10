@@ -12,16 +12,19 @@ export class HTML{
         this.element;
         this.init();
     }
+    
     init(){
         if(this.htmlString==undefined){
             this.htmlString = this.createHTMLstring();
             this.createHtmlElement()
         }
     }
+
     createHTMLstring(){
         return `
         <${this.tag} class="${this.class}" id="${this.id}"></${this.tag}>`
     }
+
     createHtmlElement(){
         const template = document.createElement('template');
         template.innerHTML = this.htmlString.trim();
@@ -29,9 +32,11 @@ export class HTML{
         this.parent.appendChild(view);
         this.element = view;
     }
+
     setValue(value){
         this.element.innerText = value;
     }
+
     addChild(childElement){
         this.element.appendChild(childElement);
     }

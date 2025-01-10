@@ -38,10 +38,21 @@
 .contentWrapper{
     width:100%;
     background-color: rgba(0, 0, 0, 0.355);
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
 }
 .hidden{
     display:none;
 }
 .selected{
     z-index: 2;
+}
+.over{
+    background-color: rgba(80, 80, 80, 0.3);
+}
+.sub-over{
+    background-color: rgba(207, 207, 207, 0.555);
+    opacity: 0.8;
 }

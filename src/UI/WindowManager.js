@@ -33,17 +33,22 @@ export class WindowManager{
     selectWindow(windowID){
         this.currentlySelected = this.list[windowID];
         this.currentlySelected.modal.element.style.zIndex = this.maxZindex+1;
+        if(this.currentlySelected.child != undefined){
+            console.log(this.currentlySelected.child);
+            this.currentlySelected.child.modal.element.style.zIndex = this.maxZindex+2;
+        }
         this.maxZindex++;
         console.log(this.currentlySelected.modal.element.zIndex);
     }
 
-    addWindow(windowName,x,y,w,h,parent){
-        const win = new Modal(this.list.length, x, y, w, h, windowName, this.mousePosition, parent);
+    addWindow(windowDetails,parent){
+        const win = new Modal(this.list.length, windowDetails.x, windowDetails.y, windowDetails.w, windowDetails.h, windowDetails.name, this.mousePosition, parent);
         win.zIndex = this.list.length;
         this.list.push(win);
         this.currentlySelected = win;
         win.zIndex = this.list.length;
         this.maxZindex+=1;
+        return win;
     }
     getWindowElementByID(id){
         return this.list[id];

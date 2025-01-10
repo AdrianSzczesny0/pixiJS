@@ -5,6 +5,7 @@ import { HTML } from "./Html";
 export class Modal{
     constructor(id,x,y,w,h,windowName,mousePosition,parent){
         this.parent = parent;
+        this.child;
         this.id = id;
         this.x = x;
         this.y = y;
@@ -21,6 +22,10 @@ export class Modal{
             x:0,
             y:0
         }
+        this.childOffset = {
+            x:0,
+            y:0
+        }
         this.zIndex = 0;
         this.init();
     }
@@ -30,21 +35,19 @@ export class Modal{
     }
 
     createWindow(){
-        let parent = this.parent == undefined  ? document.body : this.parent.modal.element;
-        console.log(this.parent);
-        let title = this.parent == undefined ? this.windowName : `${this.parent.windowName} --> ${this.windowName}`;
-        this.modal = new HTML('div', 'window', `window-${this.windowName}`,parent);
+        this.modal = new HTML('div', 'window', `window-${this.windowName}`,document.body);
         this.modal.element.zIndex = this.id;
         this.modal.element.style.width = `${this.w}px`;
         this.modal.element.style.height = `${this.h}px`;
         this.headerElement = new HTML('div','header',`header-${this.id}`, this.modal.element);
         const headerTitle = new HTML('span','title',`title-${this.id}`, this.headerElement.element);
-        headerTitle.setValue(title);
+        headerTitle.setValue(this.windowName);
         this.minBtn = new HTML('div','minBtn',`minBtn-${this.id}`, this.headerElement.element);
         this.minBtn.setValue('--');
         this.contentElement = new HTML('div','contentWrapper',`content-${this.id}`, this.modal.element);
         this.contentElement.element.style.height = `${this.h-20}px`;
-        this.contentElement.element.style.opacity = this.parent == undefined ? 0.5 : 0.3;
+        // this.modal.element.style.opacity = 1
+
         this.setWindowPositon();
     }
 
@@ -54,9 +57,12 @@ export class Modal{
         })
         this.headerElement.element.addEventListener('mouseover', (e)=>{
             this.headerElement.element.classList.add('grab');
+            this.contentElement.element.classList.add('over');
+
         })
         this.headerElement.element.addEventListener('mouseout', (e)=>{
             this.headerElement.element.classList.remove('grab');
+            this.contentElement.element.classList.remove('over');
         })
         this.headerElement.element.addEventListener('mousedown', (e)=>{
             this.headerElement.element.classList.remove('grab');
@@ -67,6 +73,14 @@ export class Modal{
         })
         this.contentElement.element.addEventListener('mousedown',(e)=>{
             createEvent(EVENTS.WINDOW.SELECTED, this.id);
+        })
+        this.contentElement.element.addEventListener('mouseover',(e)=>{ 
+            // e.target.classList.add('over');
+            this.contentElement.element.classList.add('over');
+            
+        })
+        this.contentElement.element.addEventListener('mouseout',(e)=>{
+            this.contentElement.element.classList.remove('over');
         })
         this.headerElement.element.addEventListener('mouseup', (e)=>{
             this.headerElement.element.classList.add('grab');
@@ -86,6 +100,8 @@ export class Modal{
     updateWindowPosition(){
         this.modal.element.style.left = `${this.mousePosition.x-this.grabbedOffest.x}px`;
         this.modal.element.style.top = `${this.mousePosition.y-this.grabbedOffest.y}px`;
+        this.x = this.mousePosition.x-this.grabbedOffest.x;
+        this.y = this.mousePosition.y-this.grabbedOffest.y;
     }
 
     setWindowPositon(){
@@ -101,4 +117,11 @@ export class Modal{
         this.grabbedOffest.x = this.mousePosition.x - left;
         this.grabbedOffest.y = this.mousePosition.y - top;
     }
+    addSubWindow(htmlElement){
+        this.child = htmlElement;
+    }
+    addContentComponent(htmlElement){
+        this.contentElement.element.appendChild(htmlElement.modal.element);
+    }
+
 }
