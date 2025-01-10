@@ -12,10 +12,13 @@ export class HTML{
         this.element;
         this.init();
     }
-    
+
     init(){
         if(this.htmlString==undefined){
             this.htmlString = this.createHTMLstring();
+            this.createHtmlElement()
+        }else{
+            this.htmlString = this.htmlString;
             this.createHtmlElement()
         }
     }

@@ -34,11 +34,9 @@ export class WindowManager{
         this.currentlySelected = this.list[windowID];
         this.currentlySelected.modal.element.style.zIndex = this.maxZindex+1;
         if(this.currentlySelected.child != undefined){
-            console.log(this.currentlySelected.child);
             this.currentlySelected.child.modal.element.style.zIndex = this.maxZindex+2;
         }
         this.maxZindex++;
-        console.log(this.currentlySelected.modal.element.zIndex);
     }
 
     addWindow(windowDetails,parent){

@@ -18,6 +18,7 @@ export class Modal{
         this.minBtn;
         this.modal;
         this.grabbed = false;
+        this.isMinimized = false;
         this.grabbedOffest = {
             x:0,
             y:0
@@ -27,6 +28,7 @@ export class Modal{
             y:0
         }
         this.zIndex = 0;
+        this.prevZndex;
         this.init();
     }
     init(){
@@ -46,6 +48,7 @@ export class Modal{
         this.minBtn.setValue('--');
         this.contentElement = new HTML('div','contentWrapper',`content-${this.id}`, this.modal.element);
         this.contentElement.element.style.height = `${this.h-20}px`;
+        this.modal.element.classList.add('blur');
         // this.modal.element.style.opacity = 1
 
         this.setWindowPositon();
@@ -53,6 +56,7 @@ export class Modal{
 
     addWindowEventListeners(){
         this.minBtn.element.addEventListener('click', (e)=>{
+            console.log('min max btn clicled');
             this.toggleMinMax();
         })
         this.headerElement.element.addEventListener('mouseover', (e)=>{
@@ -69,6 +73,7 @@ export class Modal{
             this.headerElement.element.classList.toggle('grabbed');
             this.grabbed = true;
             this.getOffset();
+            console.log('header clicked');
             createEvent(EVENTS.WINDOW.SELECTED, this.id);
         })
         this.contentElement.element.addEventListener('mousedown',(e)=>{
@@ -95,6 +100,16 @@ export class Modal{
     }
     toggleMinMax(){
         this.contentElement.element.classList.toggle('hidden');
+        this.modal.element.classList.toggle('blur');
+
+        if(this.contentElement.element.classList.contains('hidden')){
+            this.modal.element.style.height = `20px`;
+            this.prevZndex = this.zIndex;
+            this.modal.element.zIndex = 0;
+        }else{
+            this.modal.element.prevZndex;
+            this.modal.element.style.height = `${this.h}px`;
+        }
     }
     
     updateWindowPosition(){
@@ -122,6 +137,14 @@ export class Modal{
     }
     addContentComponent(htmlElement){
         this.contentElement.element.appendChild(htmlElement.modal.element);
+    }
+    addHtmlElement(htmlElement){
+        this.contentElement.element.appendChild(htmlElement.element);
+    }
+    minimize(){
+
+    }
+    maximize(){
     }
 
 }
