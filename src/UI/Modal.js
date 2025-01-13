@@ -30,6 +30,12 @@ export class Modal{
         this.zIndex = 0;
         this.prevZndex;
         this.init();
+        this.frame = {
+            list:[],
+            hovered:undefined,
+            grabbed:false,
+            element:undefined,
+        }
     }
     init(){
         this.createWindow();
@@ -141,10 +147,40 @@ export class Modal{
     addHtmlElement(htmlElement){
         this.contentElement.element.appendChild(htmlElement.element);
     }
-    minimize(){
 
+    addFramesToList(){
+        const frames = document.body.querySelectorAll('.frameWrapper');
+        this.frame.list = frames;
     }
-    maximize(){
+    addFrameEventListener(){
+        this.frame.list.forEach(element =>{
+            this.frameListeners(element);
+        })
+    }
+    frameListeners(element){
+        element.addEventListener('mouseover', (e)=>{
+            if(this.frame.grabbed == undefined){
+                element.classList.add('grab');
+            }
+            
+        })
+        element.addEventListener('mouseout', (e)=>{
+            element.classList.remove('grab');
+        })
+        element.addEventListener('mousedown', (e)=>{
+            console.log('mousedown');
+            this.frame.grabbed = true;
+            this.frame.element = element;
+            element.classList.remove('grab');
+            element.classList.add('grabbed');
+        })
+        element.addEventListener('mouseup', (e)=>{
+            console.log('mousedown');
+            this.frame.grabbed = false;
+            this.frame.element = undefined;
+            element.classList.add('grab');
+            element.classList.remove('grabbed');
+        })
     }
 
 }

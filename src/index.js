@@ -1,4 +1,5 @@
 
+import { createFrameListHtml } from "./UI/Frame";
 import { FramesModal } from "./UI/FramesModal";
 import { HTML } from "./UI/Html";
 import { Modal } from "./UI/Modal";
@@ -27,30 +28,33 @@ const logs2 = {
     w:300,
     h:100
 }
-const navigation = {
-    name: 'Navigation',
-    x:300,
-    y:300,
-    w:500,
-    h:200
+const frames = {
+    name: 'Frames',
+    x:900,
+    y:100,
+    w:400,
+    h:800
 }
 
 
 const testSpan = new HTML('span', 'test', 222, document.body);
 const testButton1 = new HTML('button', 'test', 222, document.body);
 const testButton2 = new HTML('button', 'test', 222, document.body);
+const framesHtmlString = createFrameListHtml([11]);
+const framesHtmlElement = new HTML('','','',document.body,framesHtmlString);
 
 
 const app  =  new App();
+
 const windowManager = new WindowManager();
+
+const framesWindow = windowManager.addWindow(frames);
+framesWindow.addHtmlElement(framesHtmlElement);
+framesWindow.addFramesToList();
+framesWindow.addFrameEventListener();
 const debugWindow = windowManager.addWindow(debug);
 const logsWindow = windowManager.addWindow(logs,debugWindow);
 const logsWindow2 = windowManager.addWindow(logs2,debugWindow);
-const framesModal = new FramesModal(1);
-// debugWindow.addContentComponent(logsWindow);
-// debugWindow.addContentComponent(logsWindow2);
-// logsWindow2.addHtmlElement(testSpan);
-// logsWindow2.addHtmlElement(testButton1);
-// logsWindow2.addHtmlElement(testButton2);
+
 
 

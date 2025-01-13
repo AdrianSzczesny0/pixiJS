@@ -22,7 +22,7 @@ export function createFrameHtml(list){
     id++;
     
     list.forEach(item => {
-        returnHtml +=`<div class="frameWrapper">
+        returnHtml +=`<div class="frameWrapper" draggable="true">
             <div class="info"></div>
             <div class="actions">
                 <div class="cloneBtn"></div>
